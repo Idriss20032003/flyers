@@ -6,7 +6,7 @@ class Event(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     date = models.DateField(null=True)
-    created_by = models.OneToOneField(
+    created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(

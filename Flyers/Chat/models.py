@@ -32,8 +32,6 @@ class Room(models.Model):
     url = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(
         max_length=20, choices=CHOICES_STATUS, default=CLOSED)
-    created_by = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name='admin_initial', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     event = models.OneToOneField(
         Event, on_delete=models.CASCADE, related_name='room', null=True)

@@ -11,7 +11,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Flow.views.home, name='home'),
     path('Groups/', Chat.views.GroupPage, name='GroupPage'),
-    path('create-room/', Chat.views.create_room, name='create-room')
+    path('api/create-room/<int:event_id>',
+         Chat.views.create_room, name='create-room')
 
 
 ]

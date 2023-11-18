@@ -29,10 +29,15 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'Authentication.User'
 
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +47,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'Authentication',
     'Flow',
+    'Chat',
 
 ]
 
@@ -79,7 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Flyers.wsgi.application'
-
+ASGI_APPLICATION = 'Flyers.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

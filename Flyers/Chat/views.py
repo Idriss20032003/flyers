@@ -15,13 +15,10 @@ def GroupPage(request):
 @require_POST
 def create_room(request, event_id):
     event = Event.objects.get(id=event_id)
-    name = f"groupe de : {request.POST.get('title', '')}"
+    name = f"groupe de : {event.title}"
     url = request.POST.get('url', '')
-    created_by = event.created_by
-    Room.objects.create(event_id=event_id, event=event,
-                        created_by=created_by, url=url)
+    Room.objects.create(event_id=event_id, event=event, url=url)
     return JsonResponse({'message': f"un groupe pour l'évènement {event.title}"})
-
 
 # UUID = Event_id !!!!
 # On créé une Room dès que l'on poste un évènement, l'id de l'évènement est alors intrinsèquement lié à la room

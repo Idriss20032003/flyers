@@ -1,11 +1,13 @@
 
  async function JoinGroupRoom (event) {
 
-    event.preventDefault(); 
+        event.preventDefault(); 
+
         // Récupérer les valeurs des champs du formulaire
         var formData = new FormData(this); // Obtenir les données du formulaire
         const event_id = formData
     
+        
         await fetch('create_event/', {
             method: 'POST',
             body: formData
@@ -48,6 +50,9 @@
     
         });
 
+
+        // Création du socket associé 
+        
         chatSocket = new WebSocket(`ws://${window.location.host}/ws/${event_id}/`)
 
         chatSocket.onmessage = function(e) {
@@ -64,5 +69,4 @@
     }
 
 let EventCreated = document.getElementById('NouvelEvent')
-let e = EventCreated.value
-EventCreated.addEventListener('submit', JoinGroupRoom(e))
+EventCreated.addEventListener('submit', function(event) {JoinGroupRoom(event)})

@@ -14,9 +14,9 @@ def GroupPage(request):
 
 @require_POST
 def create_room(request, event_id):
-    name = request.POST.get('name', '')
-    url = request.POST.get('url', '')
     event = Event.objects.get(id=event_id)
+    name = f"groupe de : {request.POST.get('title', '')}"
+    url = request.POST.get('url', '')
     created_by = event.created_by
     Room.objects.create(event_id=event_id, event=event,
                         created_by=created_by, url=url)

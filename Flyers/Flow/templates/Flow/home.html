@@ -15,7 +15,10 @@
     </div>
     
     <div>
-        {% for event in events %}
+        <a href="{% url 'create_event' %}">Fly ton event</a>
+
+        <div>
+            {% for event in events %}
         <br>
         <div>title : {{event.title}}</div>
         <div>description : {{event.description}}</div>
@@ -24,6 +27,8 @@
         <button id="join_event">join event</button>
         <br>
         {% endfor %}
+    </div>
+        
     </div>
     
 </body>

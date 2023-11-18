@@ -27,7 +27,7 @@ class Room(models.Model):
 
     )
 
-    uuid = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True, null=True)
     messages = models.ManyToManyField(Message, blank=True)
     url = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(

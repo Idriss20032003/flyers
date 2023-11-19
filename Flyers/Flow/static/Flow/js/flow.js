@@ -21,8 +21,8 @@
             // Traiter la réponse JSON en fonction du contenu
             if (data.success) {
                 // Si la création de l'événement a réussi
-                const event_id = data.eventID;
-                console.log('L\'événement a été créé avec succès. ID :', event_id);
+                const eId = data.eventID;
+                console.log('L\'événement a été créé avec succès. ID :', eId);
                 // Autre action si nécessaire...
             } else {
                 // Si la création de l'événement a échoué
@@ -37,7 +37,7 @@
     
     
     
-        await fetch(`api/create-room/${event_id}`, {
+        await fetch(`api/create-room/${eId}`, {
             method: 'POST',
             body: formData
         })
@@ -51,7 +51,7 @@
 
         // Création du socket associé 
 
-        chatSocket = new WebSocket(`ws://${window.location.host}/ws/${event_id}/`)
+        chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
 
         chatSocket.onmessage = function(e) {
             console.log('onMessage');

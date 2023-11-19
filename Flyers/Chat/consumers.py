@@ -21,8 +21,8 @@ def initials(value):
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.event_id = self.scope['url_route']['kwargs']['room_name']
-        self.group_event_id = f'chat_{self.event_id}'
+        self.eId = self.scope['url_route']['kwargs']['room_name']
+        self.group_event_id = f'chat_{self.eId}'
         user = self.scope['user']
         user_id = user.id if user.is_authenticated else None
 
@@ -69,7 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def get_room(self):
-        self.room = Room.objects.get(event_id=self.event_id)
+        self.room = Room.objects.get(eId=self.eId)
 
     @sync_to_async
     def create_message(self, sent_by, message):

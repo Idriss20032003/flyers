@@ -26,7 +26,7 @@ class Room(models.Model):
         (ACTIVE, 'active'),
 
     )
-
+    eId = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=True, null=True)
     messages = models.ManyToManyField(Message, blank=True)
     url = models.CharField(max_length=255, blank=True, null=True)
@@ -35,7 +35,6 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     event = models.OneToOneField(
         Event, on_delete=models.CASCADE, related_name='room', null=True)
-    event_id = event.id
 
     class Meta:
         ordering = ('-created_at',)

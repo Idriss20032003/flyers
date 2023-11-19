@@ -4,15 +4,15 @@ from Authentication.models import User
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField()
-    date = models.DateField(null=True)
+    description = models.CharField(max_length=500, default='')
+    date = models.DateField(null=True, blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(
         verbose_name='Illustration', null=True, blank=True)
     members = models.ManyToManyField(User, blank=True)
-    Roadmap = models.CharField(max_length=1000, default='')
+    Roadmap = models.TextField(default='', null=True)
     Likes = models.IntegerField(default=0)
 
 

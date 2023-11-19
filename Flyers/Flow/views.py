@@ -23,8 +23,8 @@ def createEvent(request):
         if form.is_valid():
             event = form.save(commit=False)
             event.created_by = request.user
-            event.members.add(request.user)
             event.save()
+            event.members.add(request.user)
             # Réponse JSON indiquant que l'événement a été créé
             return JsonResponse({'success': True, 'eventID': event.id})
         else:

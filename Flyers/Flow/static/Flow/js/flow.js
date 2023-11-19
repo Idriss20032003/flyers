@@ -49,13 +49,15 @@ chatSubmitElement.addEventListener('click',function(e){
 ////////////////////////////////////////////////////////////////////////////////
 
 let EventCreated = document.getElementById('NouvelEvent')
-
- async function JoinGroupRoom (event) {
-
+// chatlOG correspondra en html à la zone d'affichage des messages 
+// Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
+EventCreated.addEventListener('submit', async function (event) {    
+    
         event.preventDefault(); 
 
         // Récupérer les valeurs des champs du formulaire
         const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
+        console.log(formData)
         let eId = 0;
         let Put_eId = (i) => eId = i;
 
@@ -89,15 +91,9 @@ let EventCreated = document.getElementById('NouvelEvent')
             console.error('Error:', error);
         });
 
-        const title = formData.get('title')
-        const description = formData.get('description')
-        
-        const formData2 = new FormData()
-        formData2.append('title',title)
 
-        await fetch(`api/create-room/${eId}`, {
-            method: 'POST',
-            body: formData2
+        await fetch(`api/create-room/${eId}/`, {
+            method: 'POST'
         })
         .then( res => {
            return res.json
@@ -117,26 +113,14 @@ let EventCreated = document.getElementById('NouvelEvent')
             const user_id = data.user_id;
             console.log('User ID received from server:', userId);
             onChatMessage(data, user_id);
-        }
+        };
 
         chatSocket.onopen = function(e) {
-            console.log('onOpen - chat socket was opened')
-        }
+            console.log('onOpen - chat socket was opened');
+        };
 
         chatSocket.onclose = function(e) {
-            console.log('onClose - chat socket was closed')
-        }
+            console.log('onClose - chat socket was closed');
+        };
     }
-
-// chatlOG correspondra en html à la zone d'affichage des messages 
-// Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
-EventCreated.addEventListener('submit', function(event) {
-    // const formData = new FormData(this); // Obtenir les données du formulaire    
-    
-    // for (var pair of formData.entries()) {
-    //         console.log(pair[0] + ', ' + pair[1]);
-    //     }    ; 
-    JoinGroupRoom(event);
-    return False;
-
-})
+    )

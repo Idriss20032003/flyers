@@ -4,9 +4,7 @@
         event.preventDefault(); 
 
         // Récupérer les valeurs des champs du formulaire
-        var formData = new FormData(this); // Obtenir les données du formulaire
-        const event_id = formData
-    
+        var formData = new FormData(this); // Obtenir les données du formulaire    
         
         await fetch('create_event/', {
             method: 'POST',
@@ -94,10 +92,18 @@ function onChatMessage(data, user_id = None) {
 
     if (data.type == 'chat_message') {
         if (user_id == data.sender_id) {
-            chatLogElement.innerHTML += `<div class="message"> <p class="content_message">${data.message}<\p> <p class = "initials_message">${data.initials}<\p> <\div>` //ajouter le style adéquat!
+            chatLogElement.innerHTML += `<div class="message"> 
+                                        <p class="content_message">${data.message}<\p> 
+                                        <span class ="message_age">${data.created_at}<\span>
+                                        <p class = "initials_message">${data.initials}<\p> 
+                                        <\div>` //ajouter le style adéquat!
         }
         else {
-            chatLogElement.innerHTML += `<div class="message"> <p class = "initials_message">${data.initials}<\p> <p class="content_message">${data.message}<\p> <\div>` //ajouter le style adéquat!
+            chatLogElement.innerHTML += `<div class="message"> 
+                                        <p class = "initials_message">${data.initials}<\p> 
+                                        <span class ="message_age">${data.created_at}<\span>
+                                        <p class="content_message">${data.message}<\p> 
+                                        <\div>` //ajouter le style adéquat!
         }
     }
 }

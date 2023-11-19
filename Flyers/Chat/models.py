@@ -35,6 +35,7 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     event = models.OneToOneField(
         Event, on_delete=models.CASCADE, related_name='room', null=True)
+    event_id = event.id
 
     class Meta:
         ordering = ('-created_at',)

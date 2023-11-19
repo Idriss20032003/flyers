@@ -15,6 +15,7 @@ def home(request):
 
 def createEvent(request):
     if request.method == 'POST':
+        # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS
         form = EventForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)

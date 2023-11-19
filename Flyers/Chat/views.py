@@ -17,8 +17,8 @@ def create_room(request, event_id):
     event = Event.objects.get(id=event_id)
     name = f"groupe de : {event.title}"
     url = request.POST.get('url', '')
-    Room.objects.create(event_id=event_id, event=event, url=url)
-    return JsonResponse({'message': f"un groupe pour l'évènement {event.title}"})
+    Room.objects.create(name=name, event=event, url=url, event_id=event_id)
+    return JsonResponse({'message': f"un groupe a été créé pour l'évènement {event.title}"})
 
 # UUID = Event_id !!!!
 # On créé une Room dès que l'on poste un évènement, l'id de l'évènement est alors intrinsèquement lié à la room

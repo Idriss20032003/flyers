@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from django.utils.timesince import timesince
-
+from .models import Message, Room
 register = template.Library()
 
 
@@ -21,17 +21,18 @@ def initials(value):
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+        self.event_id = self.scope['url_route']['kwargs']['room_name']
+        self.group_event_id = f'chat_{self.event_id}'
         user = self.scope['user']
         user_id = user.id if user.is_authenticated else None
 
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.get_room()
+        await self.channel_layer.group_add(self.group_event_id, self.channel_name)
         await self.send(text_data=json.dumps({'user_id': user_id}))
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        await self.channel_layer.group_discard(self.group_event_id, self.channel_name)
 
     async def receive(self, text_data):
         # receive message from websocket
@@ -45,14 +46,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 # PAS OUBLIER D'ENVOYER DEPUIS LE FRONTEND L'ID DE L'UTILISATEUR CONNECTE !
 # typiquement : { "content": "Contenu du message","sender_id": 123 // Identifiant de l'utilisateur
         if type == 'message':
+            new_message = self.create_message(name, message)
             await self.channel_layer.group_send(
-                self.room_group_name, {
+                self.group_event_id, {
                     'type': 'chat_message',
                     'message': message,
                     'name': name,
                     'sender_id': sender_id,
                     'initials': initials(name),
-                    'created_at': ''}
+                    'created_at': timesince(new_message.created_at)}
             )
 
     async def chat_message(self, event):
@@ -65,4 +67,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'created_at': event['created_at']
         }))
 
+    @sync_to_async
+    def get_room(self):
+        self.room = Room.objects.get(event_id=self.event_id)
+
+    @sync_to_async
+    def create_message(self, sent_by, message):
+        message = Message.objects.create(body=message, sent_by=sent_by)
+        message.save()
+        self.room.messages.add(message)
+
+        return message
+
 # name -> nom du sender /
+#!!!!LORS DE L'ENVOI DE MESSAGES : récupérer le nom du groupe !

@@ -15,8 +15,8 @@ from Flow.models import Event
 def create_room(request, eId):
     event = Event.objects.get(id=eId)
     name = f"groupe de : {event.title}"
-    url = request.POST.get('url', '')
-    Room.objects.create(name=name, event=event, url=url, eId=eId)
+    # url = request.POST.get('url', '') IMPORTANT ????
+    Room.objects.create(name=name, event=event, eId=eId)
     return JsonResponse({'message': f"un groupe a été créé pour l'évènement {event.title}"})
 
 # UUID = Event_id !!!!

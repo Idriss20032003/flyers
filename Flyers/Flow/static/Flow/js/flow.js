@@ -87,8 +87,13 @@ chatSubmitElement.addEventListener('click',function(e){
             // Gérer les erreurs ici
             console.error('Error:', error);
         });
-    
-    
+
+        const title = formData.get('title')
+        const description = formData.get('description')
+        
+        const formData2 = new FormData()
+        formData2.append('title',title)
+
         await fetch(`api/create-room/${eId}`, {
             method: 'POST',
             body: formData
@@ -126,11 +131,12 @@ chatSubmitElement.addEventListener('click',function(e){
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
 let EventCreated = document.getElementById('NouvelEvent')
 EventCreated.addEventListener('submit', function(event) {
-    const formData = new FormData(this); // Obtenir les données du formulaire    
+    // const formData = new FormData(this); // Obtenir les données du formulaire    
     
-    for (var pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }    ; 
+    // for (var pair of formData.entries()) {
+    //         console.log(pair[0] + ', ' + pair[1]);
+    //     }    ; 
     JoinGroupRoom(event);
+    return False;
 
 })

@@ -29,6 +29,8 @@ def createEvent(request):
             return JsonResponse({'success': True, 'eventID': event.id})
         else:
             # Envoie une erreur si les données ne sont pas valides
+            for field_name, field in form.fields.items():
+                print(field_name, ':', field)
             return JsonResponse({'error': 'Invalid form data'}, status=400)
 
     else:

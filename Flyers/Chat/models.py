@@ -29,9 +29,9 @@ class Room(models.Model):
     eId = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=True, null=True)
     messages = models.ManyToManyField(Message, blank=True)
-    url = models.CharField(max_length=255, blank=True, null=True)
+    # url = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(
-        max_length=20, choices=CHOICES_STATUS, default=CLOSED)
+        max_length=20, choices=CHOICES_STATUS, default=ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     event = models.OneToOneField(
         Event, on_delete=models.CASCADE, related_name='room', null=True)

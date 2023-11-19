@@ -48,13 +48,14 @@ chatSubmitElement.addEventListener('click',function(e){
 
 ////////////////////////////////////////////////////////////////////////////////
 
+let EventCreated = document.getElementById('NouvelEvent')
 
  async function JoinGroupRoom (event) {
 
         event.preventDefault(); 
 
         // Récupérer les valeurs des champs du formulaire
-        const formData = new FormData(this); // Obtenir les données du formulaire    
+        const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
         let eId = 0;
         let Put_eId = (i) => eId = i;
 
@@ -96,7 +97,7 @@ chatSubmitElement.addEventListener('click',function(e){
 
         await fetch(`api/create-room/${eId}`, {
             method: 'POST',
-            body: formData
+            body: formData2
         })
         .then( res => {
            return res.json
@@ -129,7 +130,6 @@ chatSubmitElement.addEventListener('click',function(e){
 
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
-let EventCreated = document.getElementById('NouvelEvent')
 EventCreated.addEventListener('submit', function(event) {
     // const formData = new FormData(this); // Obtenir les données du formulaire    
     

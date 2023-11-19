@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 # Assurez-vous que le chemin de l'importation est correct
 from .forms import LoginForm, SigninForm
@@ -28,6 +29,7 @@ def login_page(request):
         request, 'Authentication/login.html', context={'form': form, 'message': message})
 
 
+@login_required
 def logout_user(request):
     logout(request)
     return redirect('login')

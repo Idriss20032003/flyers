@@ -17,6 +17,7 @@ urlpatterns = [
     path('login/', Authentication.views.login_page, name='login'),
     path('logout/', Authentication.views.logout_user, name='logout'),
     path('signin/', Authentication.views.signin, name='signin'),
+    path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
 
 ]
 

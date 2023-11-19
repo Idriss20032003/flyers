@@ -5,11 +5,15 @@
 <head>
     <title>Ma page de groupes</title>
     <!-- Inclusion du fichier JavaScript -->
-    <script src="{% static 'Flow/flow.js' %}"></script>
 </head>
 
 <body>
 <div>
     <h1> Mes groupes de discussion : </h1>
+    {% for room in rooms %}
+    <p>{{room.name}}</p>
+    <p>{{event_of_room.members.count()}}</p>
+    
+    {% endfor %}
 </div>
 </body>

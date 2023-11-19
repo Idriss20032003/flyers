@@ -5,17 +5,26 @@
 <head>
     <title>Ma page HTML</title>
     <!-- Inclusion du fichier JavaScript -->
-    <script src="{% static 'Flow/flow.js' %}"></script>
 </head>
 <body>
     <div>
         <p> Page d'accueil</p>
-        <a href="{% url 'GroupPage' %}">Communautés</a>
+        {% if user.is_authenticated %}
+        <p> <a href="{% url 'GroupPage' %}">Communautés</a>
+ </p>
+ {% else %}
+ <a href="{% url 'login' %}">Communautés</a>
+      {% endif %}
     
     </div>
     
     <div>
-        <a href="{% url 'create_event' %}">Fly ton event</a>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'create_event' %}">Fly ton event</a>
+ </p>
+ {% else %}
+ <a href="{% url 'login' %}">Fly ton event</a>
+      {% endif %}
 
         <div>
             {% for event in events %}
@@ -28,7 +37,9 @@
         <br>
         {% endfor %}
     </div>
-        
+    {% if user.is_authenticated %}
+      <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
+    {% endif %}
     </div>
     
 </body>

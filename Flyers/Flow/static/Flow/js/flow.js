@@ -4,8 +4,8 @@
         event.preventDefault(); 
 
         // Récupérer les valeurs des champs du formulaire
-        var formData = new FormData(this); // Obtenir les données du formulaire    
-        
+        const formData = new FormData(this); // Obtenir les données du formulaire    
+            
         await fetch('create_event/', {
             method: 'POST',
             body: formData
@@ -111,7 +111,12 @@ function onChatMessage(data, user_id = None) {
 
 let EventCreated = document.getElementById('NouvelEvent')
 EventCreated.addEventListener('submit', function(event) {
-    JoinGroupRoom(event)
+    //JoinGroupRoom(event);
+    const formData = new FormData(this); // Obtenir les données du formulaire    
+
+    for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }    
     return False
 })
 

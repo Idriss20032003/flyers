@@ -13,7 +13,10 @@ urlpatterns = [
     path('Groups/', Chat.views.GroupPage, name='GroupPage'),
     path('api/create-room/<int:eId>/',
          Chat.views.create_room, name='create-room'),
-    path('create_event/', Flow.views.createEvent, name='create_event')
+    path('create_event/', Flow.views.createEvent, name='create_event'),
+    path('login/', Authentication.views.login_page, name='login'),
+    path('logout/', Authentication.views.logout_user, name='logout'),
+    path('signin/', Authentication.views.signin, name='signin'),
 
 ]
 

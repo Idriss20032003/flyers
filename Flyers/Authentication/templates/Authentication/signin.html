@@ -1,0 +1,12 @@
+{% extends 'Authentication/base.html' %}
+{% block content %}
+    <p>{{ message }}</p>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" >S'inscrire</button>
+    </form>
+    <p>Vous avez déjà un compte ? 
+        <a href = "{% url 'login' %}">Se connecter</a>
+    </p>
+{% endblock content %}

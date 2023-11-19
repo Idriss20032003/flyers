@@ -3,6 +3,8 @@ from .models import Event
 from .forms import EventForm
 from django.shortcuts import redirect
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 
@@ -13,6 +15,7 @@ def home(request):
                   {'events': events})
 
 
+@login_required
 def createEvent(request):
     if request.method == 'POST':
         # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS

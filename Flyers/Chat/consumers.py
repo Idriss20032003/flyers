@@ -1,16 +1,68 @@
+from django import template
 import json
-
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from django.utils.timesince import timesince
+
+register = template.Library()
+
+
+@register.filter(sender='initials')
+def initials(value):
+    initials = ''
+
+    for name in value.split(''):
+        if name and len(initials) < 3:
+            initials += name[0].upper()
+
+    return initials
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
+        user = self.scope['user']
+        user_id = user.id if user.is_authenticated else None
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.send(text_data=json.dumps({'user_id': user_id}))
         await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        # receive message from websocket
+        text_data_json = json.loads(text_data)
+        type = text_data_json['type']
+        message = text_data_json['message']
+        name = text_data_json['name']
+        sender_id = text_data_json['sender_id']
+
+        print('Receive', type)
+# PAS OUBLIER D'ENVOYER DEPUIS LE FRONTEND L'ID DE L'UTILISATEUR CONNECTE !
+# typiquement : { "content": "Contenu du message","sender_id": 123 // Identifiant de l'utilisateur
+        if type == 'message':
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    'type': 'chat_message',
+                    'message': message,
+                    'name': name,
+                    'sender_id': sender_id,
+                    'initials': initials(name),
+                    'created_at': ''}
+            )
+
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps({
+            'type': event['type'],
+            'message': event['message'],
+            'name': event['name'],
+            'sender_id': event['sender_id'],
+            'initials': event['initials'],
+            'created_at': event['created_at']
+        }))
+
+# name -> nom du sender /

@@ -1,9 +1,14 @@
-
+// ELEMENTS DU DOM HTML
+//////////////////////////////////////////////////////////////////:
 let chatLogElement = document.getElementById('ChampMessages')
 
 // chatInputElement à utiliser dans le html des groupes
 let chatInputElement = document.getElementById('Zone chat')
- 
+
+let EventCreated = document.getElementById('NouvelEvent')
+
+
+// WEBSOCKET GESTIONNAIRE COTE CLIENT
 //////////////////////////////////////////////////////////////////////////////////
 
 function sendMessage(){
@@ -46,9 +51,9 @@ chatSubmitElement.addEventListener('click',function(e){
 })
 
 
+// CREATTION DE L'EVENT ET DE LA CHATROOM ASSOCIEE 
 ////////////////////////////////////////////////////////////////////////////////
 
-let EventCreated = document.getElementById('NouvelEvent')
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
 EventCreated.addEventListener('submit', async function (event) {    
@@ -68,7 +73,9 @@ EventCreated.addEventListener('submit', async function (event) {
         .then(response => {
             if (response.ok) {
                 // Gérer la réponse si la requête est réussie
+                console.log( response.json() )
                 return response.json();
+
             }
             throw new Error('Network response was not ok.');
         })
@@ -76,8 +83,8 @@ EventCreated.addEventListener('submit', async function (event) {
             // Traiter la réponse JSON en fonction du contenu
             if (data.success) {
                 // Si la création de l'événement a réussi
-                const eId = data.eventID;
-                Put_eId(eId);
+                let i = data.event_id;
+                Put_eId(i);
                 console.log('L\'événement a été créé avec succès. ID :', eId);
                 // Autre action si nécessaire...
             } else {
@@ -95,9 +102,7 @@ EventCreated.addEventListener('submit', async function (event) {
         await fetch(`api/create-room/${eId}/`, {
             method: 'POST'
         })
-        .then( res => {
-           return res.json
-        })
+        .then(res => res.json())
         .then( data => { console.log('data',data)
     
         });

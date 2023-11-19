@@ -26,7 +26,10 @@ def createEvent(request):
             event.save()
             event.members.add(request.user)
             # Réponse JSON indiquant que l'événement a été créé
-            return JsonResponse({'success': True, 'eventID': event.id})
+            # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
+            ######################################
+            return JsonResponse({'success': True, 'event_id': event.id})
+
         else:
             # Envoie une erreur si les données ne sont pas valides
             for field_name, field in form.fields.items():

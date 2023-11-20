@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'Authentication',
     'Flow',
     'Chat',
+    'Profile',
 
 ]
 

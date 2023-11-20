@@ -21,15 +21,15 @@ def initials(value):
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.eId = self.scope['url_route']['kwargs']['room_name']
+        self.eId = self.scope['url_route']['kwargs']['eId']
         self.group_event_id = f'chat_{self.eId}'
         user = self.scope['user']
         user_id = user.id if user.is_authenticated else None
+        await self.accept()
 
         await self.get_room()
         await self.channel_layer.group_add(self.group_event_id, self.channel_name)
         await self.send(text_data=json.dumps({'user_id': user_id}))
-        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_event_id, self.channel_name)

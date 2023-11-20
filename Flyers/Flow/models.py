@@ -1,5 +1,6 @@
 from django.db import models
 from Authentication.models import User
+# IMPORTER APRES MERGE : from django.contrib.auth.models import User
 
 
 class Event(models.Model):

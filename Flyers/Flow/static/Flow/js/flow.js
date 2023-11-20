@@ -56,32 +56,35 @@ chatSubmitElement.addEventListener('click',function(e){
 
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
-EventCreated.addEventListener('submit', async function (event) {    
+EventCreated.addEventListener('submit', function (event) {    
     
         event.preventDefault(); 
-
+        
         // Récupérer les valeurs des champs du formulaire
         const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
         console.log(formData)
         let eId = 0;
         let Put_eId = (i) => eId = i;
 
-        await fetch('create_event/', {
+        fetch('create_event/', {
             method: 'POST',
             body: formData
         })
-        .then(response => {
+        .then(async response => {
             if (response.ok) {
                 // Gérer la réponse si la requête est réussie
-                console.log( response.json() )
-                return response.json();
+                const data = await response.json();
+                console.log(data);
+                return data;
 
             }
             throw new Error('Network response was not ok.');
         })
         .then(data => {
             // Traiter la réponse JSON en fonction du contenu
-            if (data.success) {
+            try { 
+                
+                if (data.success) {
                 // Si la création de l'événement a réussi
                 let i = data.event_id;
                 Put_eId(i);
@@ -91,15 +94,16 @@ EventCreated.addEventListener('submit', async function (event) {
                 // Si la création de l'événement a échoué
                 console.error('Erreur lors de la création de l\'événement:', data.error);
                 // Autre action si nécessaire...
+            } 
+        } catch (error) {
+                console.error('Error:', error);
+
             }
         })
-        .catch(error => {
-            // Gérer les erreurs ici
-            console.error('Error:', error);
-        });
+    
      
 
-        await fetch(`api/create-room/${eId}/`, {
+        fetch(`api/create-room/${eId}/`, {
             method: 'POST'
         })
         .then(res => res.json())
@@ -129,3 +133,6 @@ EventCreated.addEventListener('submit', async function (event) {
         };
     }
     )
+
+
+    

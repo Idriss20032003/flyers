@@ -2,9 +2,9 @@ from django.shortcuts import render
 from .models import Event
 from .forms import EventForm
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-
+import json
 # Create your views here.
 
 
@@ -28,13 +28,14 @@ def createEvent(request):
             # Réponse JSON indiquant que l'événement a été créé
             # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
             ######################################
-            return JsonResponse({'success': True, 'event_id': event.id})
+            print(event.id)
+            return HttpResponse(json.dumps({'success': True, 'event_id': event.id}), content_type="application/json")
 
         else:
             # Envoie une erreur si les données ne sont pas valides
-            for field_name, field in form.fields.items():
-                print(field_name, ':', field)
-            return JsonResponse({'error': 'Invalid form data'}, status=400)
+            # for field_name, field in form.fields.items():
+            #    print(field_name, ':', field)
+            return HttpResponse(json.dumps({'error': 'Invalid form data'}), status=400, content_type="application/json")
 
     else:
         form = EventForm()

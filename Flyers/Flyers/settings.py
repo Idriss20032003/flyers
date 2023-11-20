@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# A ENLEVER APRES MERGE
 AUTH_USER_MODEL = 'Authentication.User'
 
 CHANNEL_LAYERS = {

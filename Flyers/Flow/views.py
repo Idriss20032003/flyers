@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Event
-from .forms import EventForm
+from .forms.eventforms import EventForm
+from .forms.search_form import TypeForm
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -42,3 +43,17 @@ def createEvent(request):
     return render(request,
                   'Flow/create_event.html',
                   {'form': form})
+
+
+def search_form(request):
+    form = TypeForm()
+
+    if request.method == "GET":
+        form = TypeForm(request.GET)
+        if form.is_valid():
+            search_query = form.cleaned_data['search']
+
+            results = Event.objects.filter(type = search_query)
+            return render(request, 'Flow/search_results.html', {'form': form, 'results': results})
+
+    return render(request, 'Flow/search.html', {'form': form})

@@ -4,16 +4,14 @@ from .forms import EventForm
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 
 # Create your views here.
 
-
 def home(request):
     events = Event.objects.all()
-    return render(request,
-                  'Flow/home.html',
-                  {'events': events})
-
+    list_events = serializers.serialize("json", Event.objects.all())
+    return render(request, 'Flow/home.html', {'events': events, 'list_events': list_events})
 
 @login_required
 def createEvent(request):

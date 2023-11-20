@@ -39,6 +39,9 @@ CHANNEL_LAYERS = {
 # Application definition
 
 INSTALLED_APPS = [
+    'Authentication',
+    'Flow',
+    'Chat',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,10 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'Authentication',
-    'Flow',
-    'Chat',
-    'Profile',
 
 ]
 

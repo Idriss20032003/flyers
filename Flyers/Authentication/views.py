@@ -43,6 +43,6 @@ def signin(request):
             user = form.save()
             # auto-login user
             login(request, user)
-            return redirect(settings.LOGIN_REDIRECT_URL)
+            return redirect('home')
 
     return render(request, 'Authentication/signin.html', context={'form': form})

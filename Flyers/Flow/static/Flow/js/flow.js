@@ -56,6 +56,7 @@ chatSubmitElement.addEventListener('click',function(e){
 
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
+
 EventCreated.addEventListener('submit', function (event) {    
     
         event.preventDefault(); 
@@ -69,8 +70,7 @@ EventCreated.addEventListener('submit', function (event) {
         fetch('create_event/', {
             method: 'POST',
             body: formData
-        })
-        .then(async response => {
+        }).then(async response => {
             if (response.ok) {
                 // Gérer la réponse si la requête est réussie
                 const data = await response.json();
@@ -79,8 +79,7 @@ EventCreated.addEventListener('submit', function (event) {
 
             }
             throw new Error('Network response was not ok.');
-        })
-        .then(data => {
+        }).then(data => {
             // Traiter la réponse JSON en fonction du contenu
             try { 
                 
@@ -133,5 +132,6 @@ EventCreated.addEventListener('submit', function (event) {
         };
     }
     )
+
 
 

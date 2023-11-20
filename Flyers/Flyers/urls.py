@@ -18,7 +18,6 @@ urlpatterns = [
     path('logout/', Authentication.views.logout_user, name='logout'),
     path('signin/', Authentication.views.signin, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
-    path('profile/', include('Profile.urls')),
 ]
 
 if settings.DEBUG:

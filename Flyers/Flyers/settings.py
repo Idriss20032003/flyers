@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'Authentication.User'
+#AUTH_USER_MODEL = 'Authentication.User'
 
 CHANNEL_LAYERS = {
     'default': {

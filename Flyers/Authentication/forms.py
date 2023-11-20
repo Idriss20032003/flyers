@@ -1,16 +1,31 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
+from django.contrib.auth.models import User
+from .models import Utilisateur
 
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=63, label='Nom d’utilisateur')
-    password = forms.CharField(
-        max_length=63, widget=forms.PasswordInput, label='Mot de passe')
-
-
-class SigninForm(UserCreationForm):
+class CustomUserCreationForm(UserCreationForm):
+    pseudo = forms.CharField(required=True)
     class Meta(UserCreationForm.Meta):
-        model = get_user_model()
-        fields = ('username', 'email', 'first_name',
-                  'last_name', 'profile_photo')
+        model = User
+        fields = UserCreationForm.Meta.fields + ('pseudo',)
+        labels = {
+            'username': 'Adresse électronique',
+        }
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(label='Adresse électronique', widget=forms.EmailInput(attrs={'autofocus': True}))
+    class Meta:
+        model = User
+        fields = ('email', 'password')
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+class UtilisateurForm(forms.ModelForm):
+    class Meta:
+        model = Utilisateur
+        # Ajoutez ici les champs supplémentaires nécessaires pour le producteur
+        fields = ['email']

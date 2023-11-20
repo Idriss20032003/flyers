@@ -10,9 +10,23 @@ from django.contrib.auth.decorators import login_required
 
 def home(request):
     events = Event.objects.all()
+
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            #renvoie un dictionnaire des données du formulaire
+            search_query = form.cleaned_data
+
+            if search_query['tags']:
+                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tag=search_query['tags'])
+            else:
+                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
+            return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
+    form = SearchForm()
+
     return render(request,
                   'Flow/home.html',
-                  {'events': events})
+                  {'events': events,'form': form})
 
 
 @login_required
@@ -45,15 +59,18 @@ def createEvent(request):
 
 
 def search_form(request):
-    form = SearchForm()
 
-    if request.method == "GET":
-        form = SearchForm(request.GET)
+    if request.method == "POST":
+        form = SearchForm(request.POST)
         if form.is_valid():
             #renvoie un dictionnaire des données du formulaire
             search_query = form.cleaned_data
 
-            results = Event.objects.filter(title = search_query['title'], date = search_query['date'], tag =  search_query['tags'])
-            return render(request, 'Flow/search_results.html', {'form': form, 'results': results})
+            if search_query['tags']:
+                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tag=search_query['tags'])
+            else:
+                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
+            return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
+    form = SearchForm()
 
     return render(request, 'Flow/search.html', {'form': form})

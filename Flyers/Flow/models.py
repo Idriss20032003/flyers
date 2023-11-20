@@ -18,7 +18,7 @@ class Event(models.Model):
 
 class Tags(models.Model):
     tag = models.CharField(max_length=20)
-    event = models.ManyToManyField(Event,  related_name= 'tag', on_delete=models.CASCADE)
+    event = models.ManyToManyField(Event,  related_name= 'tag')
 
 
 # IL FAUT POUVOIR ACCEDER AU GROUPE DE DISCUSSION SSI ON FAIT PARTIE DE L'EVENT !

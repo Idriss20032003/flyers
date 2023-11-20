@@ -97,7 +97,7 @@ EventCreated.addEventListener('submit', async function (event) {
             // Gérer les erreurs ici
             console.error('Error:', error);
         });
-
+     
 
         await fetch(`api/create-room/${eId}/`, {
             method: 'POST'

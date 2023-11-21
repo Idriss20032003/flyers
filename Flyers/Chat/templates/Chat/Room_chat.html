@@ -10,9 +10,9 @@
 </div>
 
 <script>
-    const eId = chatzone.getAttribute('data-eId');
-    console.log(eId);
-    chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
+    const u = chatzone.getAttribute('data-eId');
+    console.log(u);
+    chatSocket = new WebSocket(`ws://${window.location.host}/ws/${u}/`)
 
 chatSocket.onmessage = function(e) {
     console.log('onMessage');
@@ -31,3 +31,6 @@ chatSocket.onclose = function(e) {
 };
 
 </script>
+
+<script src="../../static/Flow/js/flow.js"></script>
+

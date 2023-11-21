@@ -8,11 +8,11 @@ from .models import Message, Room
 register = template.Library()
 
 
-@register.filter(sender='initials')
+@register.filter(user_name='initials')
 def initials(value):
     initials = ''
 
-    for name in value.split(''):
+    for name in value.split(' '):
         if name and len(initials) < 3:
             initials += name[0].upper()
 
@@ -39,21 +39,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         type = text_data_json['type']
         message = text_data_json['message']
-        name = text_data_json['name']
-        sender_id = text_data_json['sender_id']
+        user = self.scope['user']
+        user_name = user.username
 
         print('Receive', type)
 # PAS OUBLIER D'ENVOYER DEPUIS LE FRONTEND L'ID DE L'UTILISATEUR CONNECTE !
-# typiquement : { "content": "Contenu du message","sender_id": 123 // Identifiant de l'utilisateur
+# typiquement : { "content": "Contenu du message","user_id": 123 // Identifiant de l'utilisateur
         if type == 'message':
-            new_message = self.create_message(name, message)
+            new_message = await self.create_message(user_name, message)
             await self.channel_layer.group_send(
                 self.group_event_id, {
                     'type': 'chat_message',
                     'message': message,
-                    'name': name,
-                    'sender_id': sender_id,
-                    'initials': initials(name),
+                    'user_name': user_name,
+                    'initials': initials(user_name),
                     'created_at': timesince(new_message.created_at)}
             )
 
@@ -61,8 +60,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': event['type'],
             'message': event['message'],
-            'name': event['name'],
-            'sender_id': event['sender_id'],
+            'user_name': event['user_name'],
             'initials': event['initials'],
             'created_at': event['created_at']
         }))
@@ -79,5 +77,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         return message
 
-# name -> nom du sender /
+# user_name -> nom du sender /
 #!!!!LORS DE L'ENVOI DE MESSAGES : récupérer le nom du groupe !

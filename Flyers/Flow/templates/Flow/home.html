@@ -1,39 +1,47 @@
 {% extends 'Flow/base.html'%}
 
 {% block content %}
-    <div>
-        <p> Page d'accueil</p>
-        {% if user.is_authenticated %}
-        <p> <a href="{% url 'GroupPage' %}">Communautés</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}">Communautés</a>
-      {% endif %}
-    
-    </div>
-    
-    <div>
-        {% if user.is_authenticated %}
-        <p><a href="{% url 'create_event' %}">Fly ton event</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}">Fly ton event</a>
-      {% endif %}
 
-        <div>
-            {% for event in events %}
-        <br>
-        <div>title : {{event.title}}</div>
-        <div>description : {{event.description}}</div>
-        <div>created by : {{event.created_by}}</div>
-        <div>created at : {{event.created_at}}</div>
-        <button id="join_event">join event</button>
-        <br>
-        {% endfor %}
-    </div>
-    {% if user.is_authenticated %}
-      <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-    {% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flux</title>
+    <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
+    <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
+    <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
+</head>
+<body>
+
+    <div class="accueil">
+        <div class="connexion">
+            <p>Onglet de connexion</p>
+            {% if user.is_authenticated %}
+            <p> <a href="{% url 'GroupPage' %}">Communautés</a> </p>
+            {% else %}
+            <a href="{% url 'login' %}">Communautés</a>
+            {% endif %}
+        </div>
+        
+        <div class="flux">
+
+            <div>
+                {% if user.is_authenticated %}
+                <p><a href="{% url 'create_event' %}">Fly ton event</a></p>
+                {% else %}
+                <a href="{% url 'login' %}">Fly ton event</a>
+                {% endif %}
+            </div>
+
+            <section class="events_flow">
+            </section>
+            {% if user.is_authenticated %}
+            <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
+            {% endif %}
+        </div>
+
+        <div class="recherche">
+            <h2>Recherche</h2>
+        </div>
     </div>
 
 {% endblock %}

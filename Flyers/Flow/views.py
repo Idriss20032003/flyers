@@ -4,10 +4,13 @@ from .forms import *
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
-
+# rendu de la page home
 def home(request):
     events = Event.objects.all()
 
@@ -24,10 +27,28 @@ def home(request):
             return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
     form = SearchForm()
 
+    list_events = serializers.serialize("json", Event.objects.all())
+
     return render(request,
                   'Flow/home.html',
-                  {'events': events,'form': form})
+                  {'events': events,'form': form, 'list_events': list_events})
 
+# mise à jour du nombre de likes d'un event
+
+@csrf_exempt  # Vous pouvez utiliser csrf_exempt si vous n'utilisez pas le jeton CSRF (à des fins de démonstration seulement)
+@require_POST
+def update_like(request):
+    # Récupérez l'ID de l'élément à mettre à jour depuis la requête POST
+    element_id = request.POST.get('element_id')
+
+    # Mettez à jour la base de données (ajustez cette partie en fonction de votre modèle)
+    votre_objet = Event.objects.get(id=element_id)
+    votre_objet.Likes += 1
+    votre_objet.save()
+
+    # Retournez une réponse JSON
+    #print(JsonResponse({'success': True, 'new_likes': votre_objet.Likes}))
+    return JsonResponse({'success': True, 'new_likes': votre_objet.Likes})
 
 @login_required
 def createEvent(request):

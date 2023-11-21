@@ -1,0 +1,9 @@
+env
+Flyers/db.sqlite3
+Flyers/Flyers/__pycache__
+Flyers/Authentication/__pycache__
+Flyers/Authentication/migrations/__pycache__
+Flyers/Flow/__pycache__
+Flyers/Flow/migrations/__pycache__
+Flyers/Chat/__pycache__
+Flyers/Chat/migrations/__pycache__

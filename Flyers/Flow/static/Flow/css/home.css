@@ -14,6 +14,7 @@ body {
 
 .connexion {
     display: flex;
+    flex-direction: column;
     flex: 1;
     padding: 15px;
     border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
@@ -28,7 +29,6 @@ body {
     border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
     /*text-align: center;*/
 }
-
 
 .recherche {
     display: flex;

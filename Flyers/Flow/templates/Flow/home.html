@@ -18,9 +18,6 @@
             {% else %}
             <a href="{% url 'login' %}">Communautés</a>
             {% endif %}
-        </div>
-        
-        <div class="flux">
 
             <div>
                 {% if user.is_authenticated %}
@@ -30,11 +27,16 @@
                 {% endif %}
             </div>
 
+            {% if user.is_authenticated %}
+            <p> Vous êtes connecté. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
+            {% endif %}
+        </div>
+        
+        <div class="flux">
+
             <section class="events_flow">
             </section>
-            {% if user.is_authenticated %}
-            <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-            {% endif %}
+            
         </div>
 
         <div class="recherche">
@@ -50,7 +52,7 @@
                 {% else %}
                     <form action="" method="post" novalidate>
                         {% csrf_token %}
-                        {{ form }}
+                        {{ form.as_p }}
                         <input type="submit" value="Envoyer">
                     </form>
                 {% endif %}

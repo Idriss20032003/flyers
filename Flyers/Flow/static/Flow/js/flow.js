@@ -1,14 +1,10 @@
 // ELEMENTS DU DOM HTML
 //////////////////////////////////////////////////////////////////:
-let chatLogElement = document.getElementById('chatLogElement')
 
-// chatInputElement à utiliser dans le html des groupes
-let chatInputElement = document.getElementById('chatInputElement')
-
-let EventCreated = document.getElementById('NouvelEvent')
+let EventCreated = document.getElementById('Cevent')    
+console.log(EventCreated);
 
 let eId = null; 
-
 // WEBSOCKET GESTIONNAIRE COTE CLIENT
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -24,18 +20,20 @@ function getCookie(name) {
                 break;
             }
         }
-    }
+    };
     return cookieValue;
-}
+};
 
+
+// chatInputElement à utiliser dans le html des groupes
+let chatInputElement = document.getElementById('chatInputElement')
 function sendMessage(){
     chatSocket.send(JSON.stringify({
         'type': 'message',
         'message': chatInputElement.value,
-    }))
-
-    chatInputElement.value == ''
-}
+    }));
+};
+let chatLogElement = document.getElementById('chatLogElement')
 
 function onChatMessage(data, user_id = null) {
     console.log('onChatMessage', data)
@@ -43,27 +41,30 @@ function onChatMessage(data, user_id = null) {
     if (data.type == 'chat_message') {
         if (user_id == data.sender_id) {
             chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class="content_message">${data.message}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <\div>` //ajouter le style adéquat!
+                                        <p class="content_message">${data.message}</p> 
+                                        <span class ="message_age">${data.created_at}</span>
+                                        <p class = "initials_message">${data.initials}</p> 
+                                        </div>` //ajouter le style adéquat!
         }
         else {
             chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class="content_message">${data.message}<\p> 
-                                        <\div>` //ajouter le style adéquat!
+                                        <p class = "initials_message">${data.initials}</p> 
+                                        <span class ="message_age">${data.created_at}</span>
+                                        <p class="content_message">${data.message}</p> 
+                                        </div>` //ajouter le style adéquat!
         }
     }
 }
 
 // ChatSubmitElement à utiliser comme bouton pour envoyer un message dans le groupe
 chatSubmitElement=document.getElementById('EnvoiMess')
-chatSubmitElement.addEventListener('click',function(e){
-    e.preventDefault()
-    sendMessage()
-})
+if (chatSubmitElement) {
+    chatSubmitElement.addEventListener('click', function(e) {
+        e.preventDefault();
+        sendMessage();
+        chatInputElement.value = '';
+    });
+}
 
 
 // CREATTION DE L'EVENT ET DE LA CHATROOM ASSOCIEE 
@@ -72,16 +73,12 @@ chatSubmitElement.addEventListener('click',function(e){
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
 
-
 EventCreated.addEventListener('submit', function (event) {    
-    
+
     event.preventDefault(); 
-    
     // Récupérer les valeurs des champs du formulaire
     const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
     console.log(formData);
-    // function put (i) {eId = i} 
-
     fetch('/create_event/', {
         method: 'POST',
         body: formData
@@ -132,13 +129,8 @@ EventCreated.addEventListener('submit', function (event) {
             };
         }
     });
-
-
-    // Création du socket associé et connexion du créateur de l'event au websocket 
-
-    
-
 });
+
 
 
 

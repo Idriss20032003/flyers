@@ -6,7 +6,12 @@
 </div>
 
 <div id="chatLogElement">
-
+{% for message in room.messages.all %}
+<div class="message"> 
+    <p class="content_message">{{message.body}}</p>
+    <i><p class ="message_info">{{initials}} - {{message.created_at}}</p></i>
+    </div>
+{% endfor %}
 </div>
 
 <script>

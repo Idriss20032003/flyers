@@ -10,17 +10,17 @@
     <div>
         <p> Page d'accueil</p>
         {% if user.is_authenticated %}
-        <p> <a href="{% url 'GroupPage' %}">Communautés</a>
+        <p> <a href="{% url 'GroupPage' %}" id="OuvertureGroupes">Communautés</a>
  </p>
  {% else %}
- <a href="{% url 'login' %}">Communautés</a>
+ <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
       {% endif %}
     
     </div>
     
     <div>
         {% if user.is_authenticated %}
-        <p><a href="{% url 'create_event' %}">Fly ton event</a>
+        <p><a href="{% url 'create_event' %}" id="fly">Fly ton event</a>
  </p>
  {% else %}
  <a href="{% url 'login' %}">Fly ton event</a>
@@ -33,7 +33,9 @@
         <div>description : {{event.description}}</div>
         <div>created by : {{event.created_by}}</div>
         <div>created at : {{event.created_at}}</div>
-        <button id="join_event">join event</button>
+        <button class="join_event">join </button>
+        <button class="fund_event">Fund </button>
+
         <br>
         {% endfor %}
     </div>
@@ -41,7 +43,8 @@
       <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
     {% endif %}
     </div>
-    
+    <script src="../../static/Flow/js/flow.js"></script>
+
 </body>
 </html>
 

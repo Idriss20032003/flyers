@@ -1,5 +1,7 @@
 from django.shortcuts import render
 import json
+from django import template
+
 from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse
@@ -7,7 +9,20 @@ from django.views.decorators.http import require_POST, require_GET
 from .models import Room
 from Authentication.models import User
 from Flow.models import Event
+register = template.Library()
+
 # Create your views here.
+
+
+@register.filter(user_name='initials')
+def initials(value):
+    initials = ''
+
+    for name in value.split(' '):
+        if name and len(initials) < 3:
+            initials += name[0].upper()
+
+    return initials
 
 
 @login_required
@@ -51,5 +66,6 @@ def Room_chat(request, eId):
         'room': room,
         'user': user,
         'event': event,
-        'eId': eId
+        'eId': eId,
+        'initials': initials(user.username)
     })

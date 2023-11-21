@@ -46,7 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 # PAS OUBLIER D'ENVOYER DEPUIS LE FRONTEND L'ID DE L'UTILISATEUR CONNECTE !
 # typiquement : { "content": "Contenu du message","user_id": 123 // Identifiant de l'utilisateur
         if type == 'message':
-            new_message = await self.create_message(user_name, message)
+            new_message = await self.create_message(user_name, user, message)
             await self.channel_layer.group_send(
                 self.group_event_id, {
                     'type': 'chat_message',
@@ -70,11 +70,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room = Room.objects.get(eId=self.eId)
 
     @sync_to_async
-    def create_message(self, sent_by, message):
-        message = Message.objects.create(body=message, sent_by=sent_by)
-        message.save()
+    def create_message(self, user_name, user, mess):
+        message = Message.objects.create(
+            body=mess, sent_by=user_name, created_by=user)
         self.room.messages.add(message)
-
         return message
 
 # user_name -> nom du sender /

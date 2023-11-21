@@ -1,0 +1,33 @@
+<h2> {{room.name}}</h2>
+
+<div id="chatzone" data-eId="{{ eId }}">Envoi d'un message : 
+    <input id="chatInputElement">
+    <button id="EnvoiMess">Envoyer</button>
+</div>
+
+<div id="chatLogElement">
+
+</div>
+
+<script>
+    const eId = chatzone.getAttribute('data-eId');
+    console.log(eId);
+    chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
+
+chatSocket.onmessage = function(e) {
+    console.log('onMessage');
+    const data = JSON.parse(e.data);
+    const user_id = data.user_id;
+    console.log('User ID received from server:', user_id);
+    onChatMessage(data, user_id);
+};
+
+chatSocket.onopen = function(e) {
+    console.log('onOpen - chat socket was opened');
+};
+
+chatSocket.onclose = function(e) {
+    console.log('onClose - chat socket was closed');
+};
+
+</script>

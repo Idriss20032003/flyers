@@ -40,3 +40,16 @@ def GroupPage(request):
         'users': users
     })
 # ATTENTION CE FILTRE NE SUFFIT PAS : il faut aussi créer une permission pour chaque groupe que l'utilisateur obtient : soit s'il créé l'évènement assocéi, soit s'il rejoint un évènement
+
+
+@login_required
+def Room_chat(request, eId):
+    event = Event.objects.get(id=eId)
+    room = Room.objects.get(eId=eId)
+    user = request.user
+    return render(request, 'Chat/Room_chat.html', {
+        'room': room,
+        'user': user,
+        'event': event,
+        'eId': eId
+    })

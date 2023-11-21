@@ -1,11 +1,33 @@
 // ELEMENTS DU DOM HTML
 //////////////////////////////////////////////////////////////////:
-let chatLogElement = document.getElementById('ChampMessages')
+// let chatLogElement = document.getElementById('ChampMessages')
 
-// chatInputElement à utiliser dans le html des groupes
-let chatInputElement = document.getElementById('Zone chat')
+// // chatInputElement à utiliser dans le html des groupes
+// let chatInputElement = document.getElementById('Zone chat')
 
 let EventCreated = document.getElementById('NouvelEvent')
+
+// FONCTION CONNEXION AU SOCKET 
+function ConnectSocket(u) {
+    chatSocket = new WebSocket(`ws://${window.location.host}/ws/${u}/`)
+
+            chatSocket.onmessage = function(e) {
+                console.log('onMessage');
+                const data = JSON.parse(e.data);
+                const user_id = data.user_id;
+                console.log('User ID received from server:', user_id);
+                onChatMessage(data, user_id);
+            };
+
+            chatSocket.onopen = function(e) {
+                console.log('onOpen - chat socket was opened');
+            };
+
+            chatSocket.onclose = function(e) {
+                console.log('onClose - chat socket was closed');
+            };
+}
+
 
 function getCookie(name) {
     let cookieValue = null;
@@ -22,6 +44,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 
 // CREATTION DE L'EVENT ET DE LA CHATROOM ASSOCIEE 
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,42 +126,5 @@ EventCreated.addEventListener('submit', function (event) {
 // WEBSOCKET GESTIONNAIRE COTE CLIENT
 //////////////////////////////////////////////////////////////////////////////////
 
-function sendMessage(){
-    chatSocket.sendMessage(JSON.stringify({
-        'type': 'message',
-        'message': chatInputElement.value,
-        'name': chatName
-    }))
 
-    chatInputElement.value == ''
-}
-
-function onChatMessage(data, user_id = None) {
-    console.log('onChatMessage', data)
-
-    if (data.type == 'chat_message') {
-        if (user_id == data.sender_id) {
-            chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class="content_message">${data.message}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <\div>` //ajouter le style adéquat!
-        }
-        else {
-            chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class="content_message">${data.message}<\p> 
-                                        <\div>` //ajouter le style adéquat!
-        }
-    }
-}
-
-// ChatSubmitElement à utiliser comme bouton pour envoyer un message dans le groupe
-chatSubmitElement=document.getElementById('EnvoiMess')
-chatSubmitElement.addEventListener('click',function(e){
-    e.preventDefault()
-    sendMessage()
-    return False
-})
 

@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout/', Authentication.views.logout_user, name='logout'),
     path('signin/', Authentication.views.signin, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
+    path('Room_chat/<int:eId>/', Chat.views.Room_chat, name='Room_chat'),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{% static 'Authentication/css/styles.css' %}">
+        <title>Profil</title>
+    </head>
+    <body>
+        <h1 class="title">Bonjour {{ user.name }}</h1>
+        <p>{{ user.email }}</p>
+        {% if user.avatar.url %}
+            <img class="profile-picture" src="{{ user.avatar.url }}" alt="Profile Picture">
+        {% else %}
+            <img class="profile-picture" src="{% static 'Authentication/img/avatar/default.jpg' %}" alt="Profile Picture">
+        {% endif %}
+        <form action="{% url 'demande_validation'%}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="add-cart-button">Demander à pouvoir recevoir des paiements</button>
+        </form>
+        <form action="{% url 'modify_profile'%}" method="get">
+            {% csrf_token %}
+            <button type="submit" class="add-cart-button">Editer mon profil</button>
+        </form>
+    </body>
+</html>

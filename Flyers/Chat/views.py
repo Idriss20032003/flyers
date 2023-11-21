@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from .models import Room
-from Authentication.models import User
+from django.contrib.auth.models import User
 from Flow.models import Event
 # Create your views here.
 

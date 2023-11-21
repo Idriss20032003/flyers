@@ -16,6 +16,7 @@ CHOICE = (
 	('', 'Veuillez choisir parmi les choix'),
 	('0', 'Musique'),
 	('1', 'Sport'),
+    ('2', 'Théatre')
     )
 
 class SearchForm(forms.Form):

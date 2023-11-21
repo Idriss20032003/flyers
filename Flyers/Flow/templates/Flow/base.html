@@ -2,7 +2,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>Flux</title>
+        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
+        <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
+        <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
+    </head>
 <body>
+
 {% block content %}{% endblock %}
 
 <div class="recherche">

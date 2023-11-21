@@ -4,6 +4,8 @@ from django.shortcuts import render
 
 
 class EventForm(forms.ModelForm):
+    tags = forms.CharField(required = False)
+
     class Meta:
         model = Event
         exclude = ('created_by', 'members', 'Likes', 'created_at')

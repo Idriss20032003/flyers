@@ -24,6 +24,7 @@ urlpatterns = [
     path('signin/', Authentication.views.register, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
     path('profile/', include('Authentication.urls')),
+    path('update-like/', Flow.views.update_like, name='update-like'),
 ]
 
 if settings.DEBUG:

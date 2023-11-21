@@ -22,7 +22,8 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function printEvent(ev) {
+function printEvent(ev_model) {
+    const ev = ev_model["fields"]
     const elem = document.createElement("article")
     const elemTitle = document.createElement("h3")
     const elemDesc = document.createElement("p")
@@ -41,12 +42,14 @@ function printEvent(ev) {
     const mois = ev["created_at"][5]+ev["created_at"][6]
     const annee = ev["created_at"][0]+ev["created_at"][1]+ev["created_at"][2]+ev["created_at"][3]
     elemDateCreation.innerText = "date de création : "+jour+"/"+mois+"/"+annee+" à "+ev["created_at"][11]+ev["created_at"][12]+"h"+ev["created_at"][14]+ev["created_at"][15]
-    elemImg.src = ev["image"]
+    let img = ev["image"]
+    elemImg.src = `./media/${img}`
 
     elemLikes.class = "btn-likes"
-    elemLikes.addEventListener("click", function() {
-        const elementId = ev.pk;  // Remplacez par l'ID de l'élément que vous souhaitez mettre à jour
-
+    elemLikes.addEventListener("click", function(e) {
+        const elementId = ev_model.pk; // id de l'élément qu'on souhaite mettre à jour
+        console.log(elementId)
+        e.preventDefault()
         fetch('/update-like/', {
             method: 'POST',
             headers: {
@@ -64,10 +67,11 @@ function printEvent(ev) {
                 } else {
                     console.error('Erreur lors de la mise à jour.');
                 }
+                location.reload()
             })
             .catch(error => console.error('Erreur lors de la requête fetch :', error));
     });
-    elemLikes.innerText = "Likes : " + ev["Likes"]
+    elemLikes.innerText = "Likes : " + ev["Likes"].toString()
 
     elem.appendChild(elemTitle)
     elem.appendChild(elemDesc)
@@ -82,8 +86,9 @@ function printEvent(ev) {
 }
 
 for (let i = 0; i < list_events.length; i++) {
-    const ev = list_events[i]["fields"]; // on récupère le prochain événement de la DB
-    section_events.appendChild(printEvent(ev))
+    const ev_model = list_events[i] // on récupère le prochain événement de la DB
+    console.log(ev_model)
+    section_events.appendChild(printEvent(ev_model))
     const espace = document.createElement("br")
     section_events.appendChild(espace)
 }

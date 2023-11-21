@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Event
+from .models import Like
 from .forms import *
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -31,7 +32,7 @@ def home(request):
 
     return render(request,
                   'Flow/home.html',
-                  {'events': events,'form': form, 'list_events': list_events})
+                  {'events': events, 'form': form, 'list_events': list_events})
 
 # mise à jour du nombre de likes d'un event
 
@@ -40,15 +41,28 @@ def home(request):
 def update_like(request):
     # Récupérez l'ID de l'élément à mettre à jour depuis la requête POST
     element_id = request.POST.get('element_id')
+    print("EFDZFSZFEZ " + element_id)
+    user = request.user
 
-    # Mettez à jour la base de données (ajustez cette partie en fonction de votre modèle)
-    votre_objet = Event.objects.get(id=element_id)
-    votre_objet.Likes += 1
-    votre_objet.save()
+    # Vérifiez si l'utilisateur a déjà aimé le contenu
+    if not Like.objects.filter(user=user, event_id=element_id).exists():
+        # Ajoutez le "like" à la base de données
+        objet_like = Like()
+        objet_like.user = user
+        objet_like.event_id = element_id
+        objet_like.save()
+        # Màj du champ "Likes" de Event
 
-    # Retournez une réponse JSON
-    #print(JsonResponse({'success': True, 'new_likes': votre_objet.Likes}))
-    return JsonResponse({'success': True, 'new_likes': votre_objet.Likes})
+        votre_objet = Event.objects.get(id=element_id)
+        votre_objet.Likes += 1
+        votre_objet.save()
+        
+        # Réponse JSON indiquant le succès de la mise à jour
+        return JsonResponse({'success': True, 'new_likes': votre_objet.Likes})
+
+    # Réponse JSON indiquant que l'utilisateur a déjà aimé
+    return JsonResponse({'success': False, 'new_likes': 0})
+
 
 @login_required
 def createEvent(request):

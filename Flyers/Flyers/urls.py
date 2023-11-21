@@ -6,7 +6,7 @@ import Flow.views
 import Authentication.views
 import Chat.views
 from django.contrib.auth.views import LogoutView
-
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('signin/', Authentication.views.register, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
-    path('profile/', include('Profile.urls')),
+    path('profile/', include('Authentication.urls')),
 ]
 
 if settings.DEBUG:
@@ -30,3 +30,4 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -28,4 +28,9 @@ class UtilisateurForm(forms.ModelForm):
     class Meta:
         model = Utilisateur
         # Ajoutez ici les champs supplémentaires nécessaires pour le producteur
-        fields = ['email']
+        fields = ['email', 'avatar']
+
+class UtilisateurForm(forms.ModelForm):
+    class Meta:
+        model = Utilisateur
+        fields = ['name', 'avatar']

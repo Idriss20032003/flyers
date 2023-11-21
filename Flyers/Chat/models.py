@@ -8,8 +8,7 @@ class Message(models.Model):
     body = models.TextField()
     sent_by = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(
-        User, blank=True, null=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('created_at',)

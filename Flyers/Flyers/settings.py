@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'Authentication',
     'Flow',
     'Chat',
-    'Profile',
 
 ]
 
@@ -136,7 +135,7 @@ USE_TZ = True
 STATICFILES_DIRS = [
     # Répertoire statique de votre application
     os.path.join(BASE_DIR, 'Flow', 'static'),
-
+    os.path.join(BASE_DIR, 'Authentication', 'static'),
     # ...
 ]
 STATIC_URL = 'static/'
@@ -145,3 +144,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

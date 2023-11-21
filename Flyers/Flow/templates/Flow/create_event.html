@@ -13,7 +13,9 @@
 
  <form method="post" id='NouvelEvent' novalidate enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ event_form.as_p }}
+      {{ tag_form.as_p }}
+      
       <input type="submit" value="Envoyer">
     </form>
 

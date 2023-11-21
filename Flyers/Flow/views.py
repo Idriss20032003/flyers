@@ -12,26 +12,40 @@ from django.views.decorators.csrf import csrf_exempt
 
 # rendu de la page home
 def home(request):
+    empty_search = True
     events = Event.objects.all()
-
-    if request.method == "POST":
-        form = SearchForm(request.POST)
+    form = SearchForm(request.GET)
+    if request.method == "GET":
         if form.is_valid():
             #renvoie un dictionnaire des données du formulaire
             search_query = form.cleaned_data
+            #test si une recherche a été faite
+            for  value in search_query.values():
+                if value not in ([], '', None):
+                    empty_search = False
+                    break
+            
+            if not empty_search :
+                if search_query['tags']:
+                    results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tags__tags=search_query['tags'])
+                else:
+                    results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
+                
+                # Si des résultats sont trouvés, redirigez vers search_results.html
+                return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
 
-            if search_query['tags']:
-                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tag=search_query['tags'])
-            else:
-                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
-            return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
+    # Si aucune recherche n'a été effectuée ou si aucun résultat n'a été trouvé,
+    # ou si la recherche a été effectuée avec succès, mais sans résultat, affichez home.html    
     form = SearchForm()
+    list_events = serializers.serialize("json", events)
 
-    list_events = serializers.serialize("json", Event.objects.all())
+    empty_search = True
 
     return render(request,
                   'Flow/home.html',
                   {'events': events,'form': form, 'list_events': list_events})
+
+
 
 # mise à jour du nombre de likes d'un event
 
@@ -54,12 +68,23 @@ def update_like(request):
 def createEvent(request):
     if request.method == 'POST':
         # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event = form.save(commit=False)
+        event_form = EventForm(request.POST)
+        tag_form = TagForm(request.POST)
+        if event_form.is_valid() and tag_form.is_valid():
+            event = event_form.save(commit=False)
             event.created_by = request.user
             event.save()
+
+            # Enregistrer les tags associés à l'événement
+            tags_data = tag_form.cleaned_data.get('tags', '')
+            tags_list = ['#' + tag.strip() for tag in tags_data.split('#') if tag.strip()]
+
+            for tag_text in tags_list:
+                tag, created = Tags.objects.get_or_create(tags=tag_text)
+                event.tags.add(tag)
+
             event.members.add(request.user)
+
             # Réponse JSON indiquant que l'événement a été créé
             # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
             ######################################
@@ -67,31 +92,14 @@ def createEvent(request):
 
         else:
             # Envoie une erreur si les données ne sont pas valides
-            for field_name, field in form.fields.items():
+            for field_name, field in event_form.fields.items():
                 print(field_name, ':', field)
             return JsonResponse({'error': 'Invalid form data'}, status=400)
 
     else:
-        form = EventForm()
+        event_form = EventForm()
+        tag_form = TagForm()
 
     return render(request,
                   'Flow/create_event.html',
-                  {'form': form})
-
-
-def search_form(request):
-
-    if request.method == "POST":
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            #renvoie un dictionnaire des données du formulaire
-            search_query = form.cleaned_data
-
-            if search_query['tags']:
-                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tag=search_query['tags'])
-            else:
-                results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
-            return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
-    form = SearchForm()
-
-    return render(request, 'Flow/search.html', {'form': form})
+                  {'event_form': event_form, 'tag_form': tag_form})

@@ -1,31 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 body {
-    margin: auto;
-    padding: 16px;
+    /*margin: auto;
+    padding: 16px;*/
     font-family: 'Montserrat', sans-serif;
 }
 
 .accueil {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
+    /*flex-grow: 1;*/
 }
 
 .connexion {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
+    padding: 15px;
+    border-right: 0.5px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
+    text-align: center;
 }
 
 .flux {
     display: flex;
     flex-direction: column;
-    flex-grow: 2;
+    flex: 2;
+    padding: 15px;
+    border-right: 0.5px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
+    /*text-align: center;*/
 }
 
 .recherche {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
+    border-width: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.recherche h2 {
+    text-align: center;
 }
 
 .events_flow {
@@ -47,7 +60,11 @@ body {
 }
 
 .events_flow article {
-	border: 1px solid black;
-	padding: 4px;
+	border: 1px solid #edebeb;
+	/*padding: 4px;*/
     border-radius: 5px;
+}
+
+.events_flow h3 {
+    text-align: center;
 }

@@ -12,6 +12,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Flow.views.home, name='home'),
+    path('Search/', Flow.views.search_form, name = 'Search'),
     path('Groups/', Chat.views.GroupPage, name='GroupPage'),
     path('api/create-room/<int:eId>/',
          Chat.views.create_room, name='create-room'),

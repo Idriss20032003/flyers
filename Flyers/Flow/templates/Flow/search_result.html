@@ -1,0 +1,11 @@
+{% if results %}
+    <h2>Search Results</h2>
+    <ul>
+        {% for event in results %}
+            <li>{{ event.title }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    {% csrf_token %}
+    {{ form }}
+{% endif %}

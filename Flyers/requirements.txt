@@ -46,3 +46,4 @@ typing_extensions==4.8.0
 tzdata==2023.3
 wcwidth==0.2.10
 zope.interface==6.1
+django-filter==23.3

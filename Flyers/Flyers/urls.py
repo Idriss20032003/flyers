@@ -19,6 +19,10 @@ urlpatterns = [
     path('signin/', Authentication.views.signin, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
     path('Room_chat/<int:eId>/', Chat.views.Room_chat, name='Room_chat'),
+    path('joinEvent/<int:eId>/', Flow.views.joinEvent, name='joinEvent'),
+    path('JoinEventConfirm/<int:eId>/',
+         Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
+
 ]
 
 if settings.DEBUG:

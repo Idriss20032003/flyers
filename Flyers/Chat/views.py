@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import json
 from django import template
+from django.utils.timesince import timesince
 
 from django.contrib.auth.decorators import login_required
 
@@ -59,6 +60,8 @@ def GroupPage(request):
 
 @login_required
 def Room_chat(request, eId):
+    def Time(a):
+        return timesince(a)
     event = Event.objects.get(id=eId)
     room = Room.objects.get(eId=eId)
     user = request.user
@@ -67,5 +70,6 @@ def Room_chat(request, eId):
         'user': user,
         'event': event,
         'eId': eId,
-        'initials': initials(user.username)
+        'initials': initials(user.username),
+        'Time': Time,
     })

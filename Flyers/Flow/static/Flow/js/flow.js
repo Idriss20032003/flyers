@@ -5,6 +5,8 @@ let EventCreated = document.getElementById('Cevent')
 console.log(EventCreated);
 
 let eId = null; 
+
+
 // WEBSOCKET GESTIONNAIRE COTE CLIENT
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +36,9 @@ function sendMessage(){
     }));
 };
 let chatLogElement = document.getElementById('chatLogElement')
-
+function scrollToBottom() {
+    chatLogElement.scrollTop = chatLogElement.scrollHeight
+}
 function onChatMessage(data, user_id = null) {
     console.log('onChatMessage', data)
 
@@ -42,27 +46,44 @@ function onChatMessage(data, user_id = null) {
         if (user_id == data.sender_id) {
             chatLogElement.innerHTML += `<div class="message"> 
                                         <p class="content_message">${data.message}</p> 
-                                        <span class ="message_age">${data.created_at}</span>
-                                        <p class = "initials_message">${data.initials}</p> 
+                                        <i><p class ="message_infos">${data.created_at}-${data.initials}</p></i>
                                         </div>` //ajouter le style adéquat!
         }
         else {
             chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class = "initials_message">${data.initials}</p> 
-                                        <span class ="message_age">${data.created_at}</span>
-                                        <p class="content_message">${data.message}</p> 
-                                        </div>` //ajouter le style adéquat!
+            <p class="content_message">${data.message}</p> 
+            <i><p class ="message_infos">${data.created_at}-${data.initials}</p></i>
+            </div>` //ajouter le style adéquat!
         }
-    }
+    };
+    setTimeout(scrollToBottom(), 100); // Essaie d'ajouter un léger délai avant le défilement
 }
 
-// ChatSubmitElement à utiliser comme bouton pour envoyer un message dans le groupe
+// ENVOI DE MESSAGE PAR L UTILISATEUR EN FRONTEND 
 chatSubmitElement=document.getElementById('EnvoiMess')
 if (chatSubmitElement) {
     chatSubmitElement.addEventListener('click', function(e) {
         e.preventDefault();
-        sendMessage();
-        chatInputElement.value = '';
+        const message = chatInputElement.value.trim(); // Récupère le contenu du champ et enlève les espaces au début et à la fin
+        
+        if (message !== '') {
+            sendMessage();
+            chatInputElement.value = '';
+        } else {
+        }
+    });
+
+    chatInputElement.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const message = chatInputElement.value.trim(); // Récupère le contenu du champ et enlève les espaces au début et à la fin
+            
+            if (message !== '') {
+                sendMessage();
+                chatInputElement.value = '';
+            } else {
+            }
+        }
     });
 }
 
@@ -118,10 +139,13 @@ EventCreated.addEventListener('submit', function (event) {
                 const user_id = data.user_id;
                 console.log('User ID received from server:', user_id);
                 onChatMessage(data, user_id);
+
             };
 
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
+                setTimeout(scrollToBottom(), 100); // Essaie d'ajouter un léger délai avant le défilement
+
             };
 
             chatSocket.onclose = function(e) {

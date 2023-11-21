@@ -28,13 +28,15 @@
 
         <div>
             {% for event in events %}
-        <br>
-        <div>title : {{event.title}}</div>
+        <br> 
+        <div> title : {{event.title}}</div>
         <div>description : {{event.description}}</div>
         <div>created by : {{event.created_by}}</div>
         <div>created at : {{event.created_at}}</div>
-        <button class="join_event">join </button>
-        <button class="fund_event">Fund </button>
+        
+        <a href = "{% url 'joinEvent' event.id %}"><button class="Join" attr="{{event.id}}">join </button></a>
+        
+        <button class="B">Fund </button>
 
         <br>
         {% endfor %}
@@ -46,6 +48,47 @@
     <script src="../../static/Flow/js/flow.js"></script>
 
 </body>
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+        function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Recherche du jeton CSRF dans les cookies
+            if (cookie.startsWith(`${name}=`)) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    };
+    return cookieValue;
+};
+
+        const boutonsJoin = document.querySelectorAll('.Join');
+        
+        boutonsJoin.forEach(button => {
+            button.addEventListener('click', (e) => {
+                let id = button.getAttribute("attr");
+                console.log(id);
+
+                fetch(`/joinEvent/${id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => {
+                    // Gérer la réponse si nécessaire
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la requête :', error);
+                });
+            });
+        });
+    });
+</script>
 </html>
 
-
+ -->

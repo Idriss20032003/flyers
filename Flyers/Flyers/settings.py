@@ -136,6 +136,8 @@ USE_TZ = True
 STATICFILES_DIRS = [
     # Répertoire statique de votre application
     os.path.join(BASE_DIR, 'Flow', 'static'),
+    os.path.join(BASE_DIR, 'Chat', 'static'),
+
 
     # ...
 ]

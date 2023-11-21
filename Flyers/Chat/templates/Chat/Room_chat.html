@@ -1,24 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Salons de discussion</title>
+    <link rel="stylesheet" href="{% static 'Chat/css/Room_chat.css' %}">
+</head>
+
+<body>
 <h2> {{room.name}}</h2>
 
-<div id="chatzone" data-eId="{{ eId }}">Envoi d'un message : 
-    <input id="chatInputElement">
-    <button id="EnvoiMess">Envoyer</button>
+<div class="zone_body">
+<div class="infos/gestion">
+    {% for  member in event.members.all %}
+        {{member.username}}
+    {% endfor %}
 </div>
-
 <div id="chatLogElement">
 {% for message in room.messages.all %}
 <div class="message"> 
     <p class="content_message">{{message.body}}</p>
-    <i><p class ="message_info">{{initials}} - {{message.created_at}}</p></i>
+    <i><p class ="message_info">{{initials}}-{{message.created_at}}</p></i>
     </div>
 {% endfor %}
 </div>
-
+</div>
+<div id="chatzone" data-eId="{{ eId }}">
+    <input id="chatInputElement" value="">
+    <button id="EnvoiMess">Envoyer</button>
+</div>
+</body>
 <script>
+    chatLogElement=document.getElementById('chatLogElement');
+
     const u = chatzone.getAttribute('data-eId');
     console.log(u);
     chatSocket = new WebSocket(`ws://${window.location.host}/ws/${u}/`)
-
+    function scrollChatToBottom() {
+    chatLogElement.scrollTop = chatLogElement.scrollHeight;
+}
 chatSocket.onmessage = function(e) {
     console.log('onMessage');
     const data = JSON.parse(e.data);
@@ -29,6 +49,7 @@ chatSocket.onmessage = function(e) {
 
 chatSocket.onopen = function(e) {
     console.log('onOpen - chat socket was opened');
+
 };
 
 chatSocket.onclose = function(e) {

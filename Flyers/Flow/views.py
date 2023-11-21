@@ -5,6 +5,8 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
+from django.views.decorators.http import require_POST, require_GET
+
 # Create your views here.
 
 
@@ -43,3 +45,26 @@ def createEvent(request):
     return render(request,
                   'Flow/create_event.html',
                   {'form': form})
+
+
+@login_required
+def joinEvent(request, eId):
+    user = request.user
+    event = Event.objects.get(id=eId)
+    return render(request, 'Flow/joinEvent.html', {
+        "eId": eId,
+        "user": user,
+        'event': event
+    })
+
+
+@login_required
+def JoinEventConfirm(request, eId):
+    user = request.user
+    event = Event.objects.get(id=eId)
+    event.members.add(user)
+    return render(request, 'Flow/home.html', {
+        "eId": eId,
+        "user": user,
+        'event': event
+    })

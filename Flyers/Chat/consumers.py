@@ -2,7 +2,9 @@ from django import template
 import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.http import JsonResponse
 from django.utils.timesince import timesince
 from .models import Message, Room
 register = template.Library()
@@ -76,5 +78,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room.messages.add(message)
         return message
 
+
 # user_name -> nom du sender /
 #!!!!LORS DE L'ENVOI DE MESSAGES : récupérer le nom du groupe !
+def get_connected_members(request):
+    # Récupérer les membres connectés au groupe de la salle de chat
+    channel_layer = get_channel_layer()
+    group_name = "room_name"
+    connected_members = async_to_sync(channel_layer.group_channels)(group_name)
+
+    # Vous pouvez formater les informations des membres connectés comme nécessaire
+    members_info = []
+    for channel_name in connected_members:
+        # Extraire les informations des membres connectés
+        # Par exemple, vous pouvez obtenir l'ID de l'utilisateur à partir du channel_name
+        # et récupérer les détails de l'utilisateur pour l'affichage
+        # Ajoutez ces informations à la liste members_info
+        user_id = ...  # Extraire l'ID utilisateur du channel_name
+        user_info = Q

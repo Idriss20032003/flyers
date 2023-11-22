@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <title>Salons de discussion</title>
-    <link rel="stylesheet" href="{% static 'Chat/css/Room_chat.css' %}">
+    <link rel="stylesheet" href="../static/Chat/css/Room_chat.css">
 </head>
 
 <body>
 <h2> {{room.name}}</h2>
 
 <div class="zone_body">
+
 <div class="infos/gestion">
     {% for  member in event.members.all %}
         {{member.username}}
     {% endfor %}
 </div>
+
 <div id="chatLogElement">
+
 {% for message in room.messages.all %}
-<div class="message"> 
-    <p class="content_message">{{message.body}}</p>
-    <i><p class ="message_info">{{initials}}-{{message.created_at}}</p></i>
-    </div>
+        {% if user.username == message.sent_by %}
+            <div class="message_self"> 
+
+
+                <p class="content_message">{{message.body}}</p>
+                <i><p class ="message_info">{{message.sent_by}}-{{message.created_at}}</p></i>
+
+                </div>
+        {% else %}
+            <div class="message_other"> 
+
+                <p class="content_message">{{message.body}}</p>
+                <i><p class ="message_info">{{message.sent_by}}-{{message.created_at}}</p></i>
+
+                </div>
+        {% endif %}
 {% endfor %}
 </div>
 </div>
@@ -30,6 +44,9 @@
     <button id="EnvoiMess">Envoyer</button>
 </div>
 </body>
+<style>
+
+</style>
 <script>
     chatLogElement=document.getElementById('chatLogElement');
 
@@ -59,4 +76,5 @@ chatSocket.onclose = function(e) {
 </script>
 
 <script src="../../static/Flow/js/flow.js"></script>
+
 

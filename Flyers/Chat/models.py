@@ -41,3 +41,13 @@ class Room(models.Model):
 
         def __str__(self):
             return f'{self.uuid}'
+
+
+class Sondage(models.Model):
+    question = models.CharField(max_length=1000)
+
+
+class Réponse(models.Model):
+    sondage = models.ForeignKey(
+        Sondage, related_name='reponses', on_delete=models.CASCADE)
+    choix = models.CharField(max_length=100)

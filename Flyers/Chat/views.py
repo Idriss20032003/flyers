@@ -70,6 +70,5 @@ def Room_chat(request, eId):
         'user': user,
         'event': event,
         'eId': eId,
-        'initials': initials(user.username),
         'Time': Time,
     })

@@ -96,23 +96,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'initials': event['initials'],
         }))
 
-    # async def poll_created(self, event):
-    #     # Envoyer les détails du sondage aux clients dans la chatroom
-    #     await self.send(text_data=json.dumps({
-    #         'type': event['type'],
-    #         'question': event['question'],
-    #         'options': event['options'],
-    #         # Autres données du sondage
-    #     }))
+    async def poll_created(self, event):
+        # Envoyer les détails du sondage aux clients dans la chatroom
+        await self.send(text_data=json.dumps({
+            'type': event['type'],
+            'question': event['question'],
+            'options': event['options'],
+            # Autres données du sondage
+        }))
 
-    # async def vote_updated(self, event):
-    #     # Envoyer les résultats mis à jour du sondage aux clients dans la chatroom
-    #     await self.send(text_data=json.dumps({
-    #         'type': event['type'],
-    #         'sondage_id': event['sondage_id'],
-    #         'results': event['results'],
-    #         # Autres données mises à jour du sondage
-    #     }))
+    async def vote_updated(self, event):
+        # Envoyer les résultats mis à jour du sondage aux clients dans la chatroom
+        await self.send(text_data=json.dumps({
+            'type': event['type'],
+            'sondage_id': event['sondage_id'],
+            'results': event['results'],
+            # Autres données mises à jour du sondage
+        }))
 
     @sync_to_async
     def get_room(self):

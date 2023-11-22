@@ -8,7 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from .models import Room
+from Flow.models import Utilisateur
 from django.contrib.auth.models import User
+
 from Flow.models import Event
 register = template.Library()
 
@@ -72,3 +74,17 @@ def Room_chat(request, eId):
         'eId': eId,
         'Time': Time,
     })
+
+
+def member_profile(request, id):
+    other = Utilisateur.objects.get(id=id)
+    s = request.user
+    self = Utilisateur.objects.get(id=s.id)
+    print(self.email)
+    print(other.email)
+    return render(request, 'Chat/member_profile.html', {'other': other, 'self': self})
+
+
+def Roadmap(request, eId):
+    event = Event.objects.get(id=eId)
+    return render(request, 'Roadmap.html', {'event': event})

@@ -12,8 +12,8 @@
     <h1> Mes groupes de discussion : </h1>
     {% for room in rooms %}
 <a href="{% url 'Room_chat' room.eId %}">
-    <p>{{room.name}}</p>
-    <p>{{event_of_room.members.count}}</p></a>
+    <p>{{room.name}}</p></a>
+    <p><a href="{% url 'Roadmap' room.eId %}"></a></p>
     {% endfor %}
 </div>
 </body>

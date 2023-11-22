@@ -101,7 +101,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': event['type'],
             'question': event['question'],
-            'options': event['options'],
+            'options': event['options'],  # LIST
             # Autres données du sondage
         }))
 

@@ -59,6 +59,7 @@ function onChatMessage(data, user_id = null) {
             </div>` //ajouter le style adéquat!
         }
     };
+    
 
     // if (data.type == 'chat_notification') {
     //     if (user_id !== data.sender_id){
@@ -139,6 +140,7 @@ EventCreated.addEventListener('submit', function (event) {
         if (data) {
             console.log('data', data);
             // Le reste de ton code pour la création du socket, etc.
+            alert(`L'évènement a été créé, retrouvez ses membres dans vos communautés !`)
 
             chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
 
@@ -151,16 +153,21 @@ EventCreated.addEventListener('submit', function (event) {
 
             };
 
+
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
+    window.location.href = '/'; // Redirection vers la page d'accueil
 
             };
+
 
             chatSocket.onclose = function(e) {
                 console.log('onClose - chat socket was closed');
             };
+
+           
         }
-    });
+    })
 });
 
 

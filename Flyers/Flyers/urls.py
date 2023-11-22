@@ -28,7 +28,10 @@ urlpatterns = [
          Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
     path('profile/', include('Authentication.urls')),
     path('update-like/', Flow.views.update_like, name='update-like'),
-
+    path('member_profile/<int:id>/',
+         Chat.views.member_profile, name='member_profile'),
+    path('Roadmap/<int:eId>/',
+         Chat.views.Roadmap, name='Roadmap'),
 ]
 
 if settings.DEBUG:

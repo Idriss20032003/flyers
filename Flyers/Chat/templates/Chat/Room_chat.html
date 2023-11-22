@@ -13,8 +13,11 @@
 
 <div class="infos/gestion">
     {% for  member in event.members.all %}
-        {{member.username}}
+       <a href="{% url 'member_profile' member.id %}"><div class="member"> {{member.username}}
+        {{member.email}}
+        {{member.avatar}}
     {% endfor %}
+</div></a>
 </div>
 
 <div id="chatLogElement">
@@ -56,6 +59,10 @@
     function scrollChatToBottom() {
     chatLogElement.scrollTop = chatLogElement.scrollHeight;
 }
+window.onload = function() {
+    scrollChatToBottom(); // Appeler la fonction pour faire défiler vers le bas au chargement
+};
+
 chatSocket.onmessage = function(e) {
     console.log('onMessage');
     const data = JSON.parse(e.data);

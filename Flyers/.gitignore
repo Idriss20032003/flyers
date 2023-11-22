@@ -13,3 +13,4 @@ Flyers/Flow/migrations/__pycache__
 Flyers/Chat/migrations/__pycache__
 Flyers/Profile/migrations/__pycache__
 Flyers/Authentication/migrations/__pycache__
+db.sqlite3

@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +10,7 @@
 <div>
     <h1>Fly ton initiative</h1>
 
- <form method="post" id='NouvelEvent' novalidate enctype="multipart/form-data">
+ <form id='Cevent' novalidate enctype="multipart/form-data">
       {% csrf_token %}
       {{ event_form.as_p }}
       {{ tag_form.as_p }}
@@ -20,6 +19,8 @@
     </form>
 
 </div>
-<script src="{% static 'Flow/js/flow.js' %}"></script>
+
+<script src="../../static/Flow/js/flow.js"></script>
+
 
 </body>

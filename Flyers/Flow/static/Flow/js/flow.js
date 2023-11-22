@@ -1,54 +1,100 @@
 // ELEMENTS DU DOM HTML
 //////////////////////////////////////////////////////////////////:
-let chatLogElement = document.getElementById('ChampMessages')
 
-// chatInputElement à utiliser dans le html des groupes
-let chatInputElement = document.getElementById('Zone chat')
+let EventCreated = document.getElementById('Cevent')    
+console.log(EventCreated);
 
-let EventCreated = document.getElementById('NouvelEvent')
+let eId = null; 
 
 
 // WEBSOCKET GESTIONNAIRE COTE CLIENT
 //////////////////////////////////////////////////////////////////////////////////
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Recherche du jeton CSRF dans les cookies
+            if (cookie.startsWith(`${name}=`)) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    };
+    return cookieValue;
+};
+
+
+// chatInputElement à utiliser dans le html des groupes
+let chatInputElement = document.getElementById('chatInputElement')
 function sendMessage(){
-    chatSocket.sendMessage(JSON.stringify({
+    chatSocket.send(JSON.stringify({
         'type': 'message',
         'message': chatInputElement.value,
-        'name': chatName
-    }))
-
-    chatInputElement.value == ''
+    }));
+    // chatSocket.send(JSON.stringify({
+    //     'type': 'notification',
+    //     'message': chatInputElement.value,
+    // }));
+};
+let chatLogElement = document.getElementById('chatLogElement')
+function scrollToBottom() {
+    chatLogElement.scrollTop = chatLogElement.scrollHeight
 }
-
-function onChatMessage(data, user_id = None) {
+function onChatMessage(data, user_id = null) {
     console.log('onChatMessage', data)
 
     if (data.type == 'chat_message') {
         if (user_id == data.sender_id) {
             chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class="content_message">${data.message}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <\div>` //ajouter le style adéquat!
+                                        <p class="content_message">${data.message}</p> 
+                                        <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
+                                        </div>` //ajouter le style adéquat!
         }
         else {
             chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class = "initials_message">${data.initials}<\p> 
-                                        <span class ="message_age">${data.created_at}<\span>
-                                        <p class="content_message">${data.message}<\p> 
-                                        <\div>` //ajouter le style adéquat!
+            <p class="content_message">${data.message}</p> 
+            <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
+            </div>` //ajouter le style adéquat!
         }
-    }
+    };
+
+    // if (data.type == 'chat_notification') {
+    //     if (user_id !== data.sender_id){
+    //         alert(`${data.user_name} a envoyé un message dans '${data.room}'`)
+    //     }
+    // };
 }
 
-// ChatSubmitElement à utiliser comme bouton pour envoyer un message dans le groupe
+// ENVOI DE MESSAGE PAR L UTILISATEUR EN FRONTEND 
 chatSubmitElement=document.getElementById('EnvoiMess')
-chatSubmitElement.addEventListener('click',function(e){
-    e.preventDefault()
-    sendMessage()
-    return False
-})
+if (chatSubmitElement) {
+    chatSubmitElement.addEventListener('click', function(e) {
+        e.preventDefault();
+        const message = chatInputElement.value.trim(); // Récupère le contenu du champ et enlève les espaces au début et à la fin
+        
+        if (message !== '') {
+            sendMessage();
+            chatInputElement.value = '';
+        } else {
+        }
+    });
+
+    chatInputElement.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const message = chatInputElement.value.trim(); // Récupère le contenu du champ et enlève les espaces au début et à la fin
+            
+            if (message !== '') {
+                sendMessage();
+                chatInputElement.value = '';
+            } else {
+            }
+        }
+    });
+}
 
 
 // CREATTION DE L'EVENT ET DE LA CHATROOM ASSOCIEE 
@@ -56,76 +102,72 @@ chatSubmitElement.addEventListener('click',function(e){
 
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
-EventCreated.addEventListener('submit', async function (event) {    
-    
-        event.preventDefault(); 
 
-        // Récupérer les valeurs des champs du formulaire
-        const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
-        console.log(formData)
-        let eId = 0;
-        let Put_eId = (i) => eId = i;
+EventCreated.addEventListener('submit', function (event) {    
 
-        await fetch('create_event/', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                // Gérer la réponse si la requête est réussie
-                console.log( response.json() )
-                return response.json();
+    event.preventDefault(); 
+    // Récupérer les valeurs des champs du formulaire
+    const formData = new FormData(EventCreated); // Obtenir les données du formulaire    
+    console.log(formData);
+    fetch('/create_event/', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    }).then(data => {
+        if (data.success) {
+            eId = data.event_id;
+            console.log('L\'événement a été créé avec succès. ID :', eId);
 
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(data => {
-            // Traiter la réponse JSON en fonction du contenu
-            if (data.success) {
-                // Si la création de l'événement a réussi
-                let i = data.event_id;
-                Put_eId(i);
-                console.log('L\'événement a été créé avec succès. ID :', eId);
-                // Autre action si nécessaire...
-            } else {
-                // Si la création de l'événement a échoué
-                console.error('Erreur lors de la création de l\'événement:', data.error);
-                // Autre action si nécessaire...
-            }
-        })
-        .catch(error => {
-            // Gérer les erreurs ici
-            console.error('Error:', error);
-        });
-     
+            return fetch(`/api/create-room/${eId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            });
+        } else {
+            console.error('Erreur lors de la création de l\'événement:', data.error);
+        }
+    }).then(res => {
+        if (res) {
+            return res.json();
+        }
+    }).then(data => {
+        if (data) {
+            console.log('data', data);
+            // Le reste de ton code pour la création du socket, etc.
 
-        await fetch(`api/create-room/${eId}/`, {
-            method: 'POST'
-        })
-        .then(res => res.json())
-        .then( data => { console.log('data',data)
-    
-        });
+            chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
+
+            chatSocket.onmessage = function(e) {
+                console.log('onMessage');
+                const data = JSON.parse(e.data);
+                const user_id = data.user_id;
+                console.log('User ID received from server:', user_id);
+                onChatMessage(data, user_id);
+
+            };
+
+            chatSocket.onopen = function(e) {
+                console.log('onOpen - chat socket was opened');
+
+            };
+
+            chatSocket.onclose = function(e) {
+                console.log('onClose - chat socket was closed');
+            };
+        }
+    });
+});
 
 
-        // Création du socket associé 
 
-        chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
 
-        chatSocket.onmessage = function(e) {
-            console.log('onMessage');
-            const data = JSON.parse(e.data);
-            const user_id = data.user_id;
-            console.log('User ID received from server:', userId);
-            onChatMessage(data, user_id);
-        };
 
-        chatSocket.onopen = function(e) {
-            console.log('onOpen - chat socket was opened');
-        };
 
-        chatSocket.onclose = function(e) {
-            console.log('onClose - chat socket was closed');
-        };
-    }
-    )
+
+
+

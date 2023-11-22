@@ -9,6 +9,43 @@
         <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
     </head>
 <body>
+    <div>
+        <p> Page d'accueil</p>
+        {% if user.is_authenticated %}
+        <p> <a href="{% url 'GroupPage' %}" id="OuvertureGroupes">Communautés</a>
+ </p>
+ {% else %}
+ <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
+      {% endif %}
+    
+    </div>
+    
+    <div>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'create_event' %}" id="fly">Fly ton event</a>
+ </p>
+ {% else %}
+ <a href="{% url 'login' %}">Fly ton event</a>
+      {% endif %}
+
+        <div>
+            {% for event in events %}
+        <br> 
+        <div> title : {{event.title}}</div>
+        <div>description : {{event.description}}</div>
+        <div>created by : {{event.created_by}}</div>
+        <div>created at : {{event.created_at}}</div>
+        
+        <a href = "{% url 'joinEvent' event.id %}"><button class="Join" attr="{{event.id}}">join </button></a>
+        
+        <button class="B">Fund </button>
+
+        <br>
+        {% endfor %}
+    </div>
+    {% if user.is_authenticated %}
+      <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
+    {% endif %}
 
     <div class="accueil">
         <div class="connexion">
@@ -63,8 +100,50 @@
         </div>
     </div>
 
-    
+    <script src="../../static/Flow/js/flow.js"></script>
+
 </body>
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+        function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Recherche du jeton CSRF dans les cookies
+            if (cookie.startsWith(`${name}=`)) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    };
+    return cookieValue;
+};
+
+        const boutonsJoin = document.querySelectorAll('.Join');
+        
+        boutonsJoin.forEach(button => {
+            button.addEventListener('click', (e) => {
+                let id = button.getAttribute("attr");
+                console.log(id);
+
+                fetch(`/joinEvent/${id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => {
+                    // Gérer la réponse si nécessaire
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la requête :', error);
+                });
+            });
+        });
+    });
+</script>
 </html>
 
-
+ -->

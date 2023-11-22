@@ -22,8 +22,11 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('signin/', Authentication.views.register, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
-    path('profile/', include('Authentication.urls')),
-    path('update-like/', Flow.views.update_like, name='update-like'),
+    path('Room_chat/<int:eId>/', Chat.views.Room_chat, name='Room_chat'),
+    path('joinEvent/<int:eId>/', Flow.views.joinEvent, name='joinEvent'),
+    path('JoinEventConfirm/<int:eId>/',
+         Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
+
 ]
 
 if settings.DEBUG:

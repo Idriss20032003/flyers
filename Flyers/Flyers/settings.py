@@ -38,6 +38,9 @@ CHANNEL_LAYERS = {
 # Application definition
 
 INSTALLED_APPS = [
+    'Authentication',
+    'Flow',
+    'Chat',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -135,7 +138,9 @@ USE_TZ = True
 STATICFILES_DIRS = [
     # Répertoire statique de votre application
     os.path.join(BASE_DIR, 'Flow', 'static'),
-    os.path.join(BASE_DIR, 'Authentication', 'static'),
+    os.path.join(BASE_DIR, 'Authentication', 'static'),    os.path.join(BASE_DIR, 'Chat', 'static'),
+
+
     # ...
 ]
 STATIC_URL = 'static/'

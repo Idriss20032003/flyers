@@ -3,11 +3,13 @@ from .models import Event
 from .models import Like
 from .forms import *
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+import json
+from django.views.decorators.http import require_POST, require_GET
 
 # Create your views here.
 
@@ -119,7 +121,8 @@ def createEvent(request):
             # Réponse JSON indiquant que l'événement a été créé
             # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
             ######################################
-            return JsonResponse({'success': True, 'event_id': event.id})
+            print(event.id)
+            return HttpResponse(json.dumps({'success': True, 'event_id': event.id}), content_type="application/json")
 
         else:
             # Envoie une erreur si les données ne sont pas valides
@@ -134,3 +137,26 @@ def createEvent(request):
     return render(request,
                   'Flow/create_event.html',
                   {'event_form': event_form, 'tag_form': tag_form})
+
+
+@login_required
+def joinEvent(request, eId):
+    user = request.user
+    event = Event.objects.get(id=eId)
+    return render(request, 'Flow/joinEvent.html', {
+        "eId": eId,
+        "user": user,
+        'event': event
+    })
+
+
+@login_required
+def JoinEventConfirm(request, eId):
+    user = request.user
+    event = Event.objects.get(id=eId)
+    event.members.add(user)
+    return render(request, 'Flow/home.html', {
+        "eId": eId,
+        "user": user,
+        'event': event
+    })

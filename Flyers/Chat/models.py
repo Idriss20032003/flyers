@@ -8,7 +8,8 @@ class Message(models.Model):
     body = models.TextField()
     sent_by = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('created_at',)
@@ -40,13 +41,3 @@ class Room(models.Model):
 
         def __str__(self):
             return f'{self.uuid}'
-
-
-class Sondage(models.Model):
-    question = models.CharField(max_length=1000)
-
-
-class Réponse(models.Model):
-    sondage = models.ForeignKey(
-        Sondage, related_name='reponses', on_delete=models.CASCADE)
-    choix = models.CharField(max_length=100)

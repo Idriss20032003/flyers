@@ -15,7 +15,7 @@ class TagForm(forms.ModelForm):
 
 
 EVENT_TYPES = (
-	('', 'Veuillez choisir parmi les choix'),
+	('', '-----'),
 	('conference', 'Conférence'),
 	('workshop', 'Atelier'),
     ('meetup', 'Rencontre'),
@@ -26,10 +26,10 @@ EVENT_TYPES = (
     )
 
 class SearchForm(forms.Form):
-    #type = forms.ChoiceField(widget = forms.Select, choice = CHOICE)
     
     title = forms.CharField(required = False)
     date = forms.DateField(required = False)
+    event_type = forms.ChoiceField(widget = forms.Select, choices = EVENT_TYPES)
     tags = forms.CharField(required = False)
 
     

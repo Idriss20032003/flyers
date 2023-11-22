@@ -19,6 +19,7 @@ def home(request):
         if form.is_valid():
             #renvoie un dictionnaire des données du formulaire
             search_query = form.cleaned_data
+            tags_list = ['#' + tag.strip() for tag in search_query['tag'].split('#') if tag.strip()]
 
             #test si une recherche a été faite
             for  value in search_query.values():
@@ -28,9 +29,15 @@ def home(request):
             
             if not empty_search :
                 if search_query['tags']:
-                    results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'], tags__tags=search_query['tags'])
+                    tags_list = ['#' + tag.strip() for tag in search_query['tag'].split('#') if tag.strip()]
+                    results = Event.objects.filter(title__icontains=search_query['title'], 
+                                                   date=search_query['date'],
+                                                   event_type=search_query['event_type'], 
+                                                   tags__tags__in=tags_list)
                 else:
-                    results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
+                    results = Event.objects.filter(title__icontains=search_query['title'], 
+                                                   date=search_query['date'], 
+                                                   event_type=search_query['event_type'])
                 
                 list_events = serializers.serialize("json", results)
                 # Si des résultats sont trouvés, redirigez vers search_results.html

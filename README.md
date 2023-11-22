@@ -1,9 +1,15 @@
 # CW02
 
+<<<<<<< HEAD
+## Config branch
+
+pip install -r requirements.txt #ajoute tous les modules nécessaires
+=======
 ## Configurer une branche
 
 pip install -r requirements.txt #ajoute tous les modules nécessaires
 
+>>>>>>> 826a833fd991080023f3d2a52b8cfb9ae1c94186
 pip freeze > requirements.txt #indique les modules installés en local
 
 ## Getting started

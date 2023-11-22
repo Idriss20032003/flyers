@@ -1,0 +1,16 @@
+env1
+env
+env_local
+Flyers/db.sqlite3
+Flyers/__pycache__
+Flyers/Flyers/__pycache__
+Flyers/Flow/__pycache__
+Flyers/Chat/__pycache__
+Flyers/Profile/__pycache__
+Flyers/Authentication/__pycache__
+Flyers/Flyers/migrations/__pycache__
+Flyers/Flow/migrations/__pycache__
+Flyers/Chat/migrations/__pycache__
+Flyers/Profile/migrations/__pycache__
+Flyers/Authentication/migrations/__pycache__
+db.sqlite3

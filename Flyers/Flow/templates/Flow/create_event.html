@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ma page HTML</title>
+    <!-- Inclusion du fichier JavaScript -->
+</head>
+
+<body>
+<div>
+    <h1>Fly ton initiative</h1>
+
+ <form method = 'post' id ='Cevent' novalidate enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ event_form.as_p }}
+      {{ tag_form.as_p }}
+      
+      <input type="submit" value="Envoyer">
+    </form>
+
+</div>
+
+<script src="../../static/Flow/js/flow.js"></script>
+
+
+</body>

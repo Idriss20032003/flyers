@@ -38,4 +38,3 @@ class TinyCart(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
-# IL FAUT POUVOIR ACCEDER AU GROUPE DE DISCUSSION SSI ON FAIT PARTIE DE L'EVENT !

@@ -1,5 +1,6 @@
 env1
 env
+env_local
 Flyers/db.sqlite3
 Flyers/__pycache__
 Flyers/Flyers/__pycache__

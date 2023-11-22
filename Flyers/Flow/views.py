@@ -19,6 +19,7 @@ def home(request):
         if form.is_valid():
             #renvoie un dictionnaire des données du formulaire
             search_query = form.cleaned_data
+
             #test si une recherche a été faite
             for  value in search_query.values():
                 if value not in ([], '', None):
@@ -31,14 +32,14 @@ def home(request):
                 else:
                     results = Event.objects.filter(title__icontains=search_query['title'], date=search_query['date'])
                 
+                list_events = serializers.serialize("json", results)
                 # Si des résultats sont trouvés, redirigez vers search_results.html
-                return render(request, 'Flow/search_result.html', {'form': form, 'results': results})
+                return render(request, 'Flow/home.html', {'form': form, 'list_events': list_events})
 
     # Si aucune recherche n'a été effectuée ou si aucun résultat n'a été trouvé,
     # ou si la recherche a été effectuée avec succès, mais sans résultat, affichez home.html    
     form = SearchForm()
     list_events = serializers.serialize("json", events)
-
     empty_search = True
 
     return render(request,
@@ -70,7 +71,9 @@ def createEvent(request):
         # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS
         event_form = EventForm(request.POST)
         tag_form = TagForm(request.POST)
+
         if event_form.is_valid() and tag_form.is_valid():
+            # Sauvegarder l'objet Event sans les tags
             event = event_form.save(commit=False)
             event.created_by = request.user
             event.save()
@@ -81,10 +84,17 @@ def createEvent(request):
 
             for tag_text in tags_list:
                 tag, created = Tags.objects.get_or_create(tags=tag_text)
+                tag.save()
                 event.tags.add(tag)
 
             event.members.add(request.user)
 
+            try :
+                # Sauvegarder à nouveau l'objet Event pour enregistrer les tags
+                event.save()
+            except Exception as e:
+                print(f"Erreur d'enregistrement de l'event : {e}")
+            
             # Réponse JSON indiquant que l'événement a été créé
             # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
             ######################################

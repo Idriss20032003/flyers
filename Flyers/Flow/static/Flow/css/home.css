@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 body {
-    /*margin: auto;
-    padding: 16px;*/
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -10,17 +8,16 @@ body {
 .accueil {
     display: flex;
     flex-direction: row;
-    /*flex-grow: 1;*/
 }
 
 a {
-    color: inherit; /* Utilise la couleur du texte par défaut */
-    text-decoration: none; /* Désactive le soulignement */
+    color: inherit;
+    text-decoration: none;
 }
 
 a:hover {
-    color: #ff0000; /* Couleur du texte lorsqu'il est survolé */
-    text-decoration: underline; /* Soulignement lorsqu'il est survolé */
+    color: #ff0000;
+    text-decoration: underline;
 }
 
 .connexion {
@@ -28,7 +25,7 @@ a:hover {
     flex-direction: column;
     flex: 1;
     padding: 15px;
-    border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
+    border-right: 1px solid #edebeb;
     text-align: center;
 }
 
@@ -40,16 +37,13 @@ a:hover {
     background-color: rgb(29, 155, 240);
     padding: 15px;
     text-decoration: none;
-    /*: 5px solid #edebeb;*/
 }
 
 .flux {
     display: flex;
     flex-direction: column;
     flex: 2;
-    /*padding: 15px;*/
-    border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
-    /*text-align: center;*/
+    border-right: 1px solid #edebeb;
 }
 
 .recherche {
@@ -72,20 +66,15 @@ a:hover {
 .events_flow {
     display: flex;
     flex-direction: column;
-    /*flex: 1;*/
-	/*margin: 8px;*/
     display: grid;
     align-items: center;
     gap: 5px;
 }
 
 .events_flow article {
-	/*border: 1px solid #edebeb;*/
     display: flex;
     flex-direction: column;
-    /*align-items: center;*/
 	padding: 4px;
-    /*border-radius: 5px;*/
     border-top: 1px solid #edebeb;
     gap: 2px;
 }
@@ -115,5 +104,6 @@ a:hover {
     display: flex;
     flex-direction: row;
 }
+*/
 
 

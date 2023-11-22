@@ -34,6 +34,10 @@ function sendMessage(){
         'type': 'message',
         'message': chatInputElement.value,
     }));
+    // chatSocket.send(JSON.stringify({
+    //     'type': 'notification',
+    //     'message': chatInputElement.value,
+    // }));
 };
 let chatLogElement = document.getElementById('chatLogElement')
 function scrollToBottom() {
@@ -46,17 +50,22 @@ function onChatMessage(data, user_id = null) {
         if (user_id == data.sender_id) {
             chatLogElement.innerHTML += `<div class="message"> 
                                         <p class="content_message">${data.message}</p> 
-                                        <i><p class ="message_infos">${data.created_at}-${data.initials}</p></i>
+                                        <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
                                         </div>` //ajouter le style adéquat!
         }
         else {
             chatLogElement.innerHTML += `<div class="message"> 
             <p class="content_message">${data.message}</p> 
-            <i><p class ="message_infos">${data.created_at}-${data.initials}</p></i>
+            <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
             </div>` //ajouter le style adéquat!
         }
     };
-    setTimeout(scrollToBottom(), 100); // Essaie d'ajouter un léger délai avant le défilement
+
+    // if (data.type == 'chat_notification') {
+    //     if (user_id !== data.sender_id){
+    //         alert(`${data.user_name} a envoyé un message dans '${data.room}'`)
+    //     }
+    // };
 }
 
 // ENVOI DE MESSAGE PAR L UTILISATEUR EN FRONTEND 
@@ -144,7 +153,6 @@ EventCreated.addEventListener('submit', function (event) {
 
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
-                setTimeout(scrollToBottom(), 100); // Essaie d'ajouter un léger délai avant le défilement
 
             };
 

@@ -32,6 +32,8 @@ urlpatterns = [
          Chat.views.member_profile, name='member_profile'),
     path('Roadmap/<int:eId>/',
          Chat.views.Roadmap, name='Roadmap'),
+    path('Roadmap_seeOnly/<int:eId>/',
+         Flow.views.Roadmap_seeOnly, name='Roadmap_seeOnly'),
 ]
 
 if settings.DEBUG:

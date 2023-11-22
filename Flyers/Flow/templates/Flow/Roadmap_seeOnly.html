@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Roadmap</title>
+  <style>
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    #title {
+      text-align: center;
+      font-size: 28px;
+      margin-left: 50px;
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #editor-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #editor {
+      width: 80%;
+      height: 80%;
+      padding: 20px;
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      outline: none;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      position: relative;
+      pointer-events: none; 
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="title" attr="{{event.id}}">R<br>O<br>A<br>D<br>M<br>A<br>P</div>
+
+  <div id="editor-container">
+    <div id="editor">
+      
+    </div>
+  </div>
+
+  <script>
+    const ID = document.getElementById('title').getAttribute('attr');
+    const contenuSauvegarde = localStorage.getItem(`${ID}`);
+    if (contenuSauvegarde) {
+      document.getElementById('editor').innerHTML = contenuSauvegarde;
+    }
+  </script>
+</body>
+</html>

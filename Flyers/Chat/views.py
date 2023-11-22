@@ -85,6 +85,7 @@ def member_profile(request, id):
     return render(request, 'Chat/member_profile.html', {'other': other, 'self': self})
 
 
+@login_required
 def Roadmap(request, eId):
     event = Event.objects.get(id=eId)
-    return render(request, 'Roadmap.html', {'event': event})
+    return render(request, 'Chat/Roadmap.html', {'event': event, 'eId': eId})

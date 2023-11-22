@@ -12,11 +12,12 @@
 <div class="zone_body">
 
 <div class="infos/gestion">
+    <b>Membres </b>
     {% for  member in event.members.all %}
-       <a href="{% url 'member_profile' member.id %}"><div class="member"> {{member.username}}
-        {{member.email}}
-        {{member.avatar}}
+       <a href="{% url 'member_profile' member.id %}"><div class="member"> 
+        {{member.username}}
     {% endfor %}
+    <a href="{% url 'Roadmap' room.eId %}"><button>Roadmap</button></a>
 </div></a>
 </div>
 
@@ -41,6 +42,7 @@
         {% endif %}
 {% endfor %}
 </div>
+
 </div>
 <div id="chatzone" data-eId="{{ eId }}">
     <input id="chatInputElement" value="">

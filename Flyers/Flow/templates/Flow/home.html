@@ -4,15 +4,14 @@
 <html>
     <head>
         <title>Flux</title>
-        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
         <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
         <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
+        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
     </head>
 <body>
 
     <div class="accueil">
         <div class="connexion">
-            <p>Onglet de connexion</p>
             {% if user.is_authenticated %}
             <p> <a href="{% url 'GroupPage' %}">Communautés</a> </p>
             {% else %}
@@ -21,9 +20,13 @@
 
             <div>
                 {% if user.is_authenticated %}
+                <div class="fly_ton_event">
                 <p><a href="{% url 'create_event' %}">Fly ton event</a></p>
+                </div>
                 {% else %}
-                <a href="{% url 'login' %}">Fly ton event</a>
+                <div class="fly_ton_event">
+                <p><a href="{% url 'login' %}">Fly ton event</a></p>
+                </div>
                 {% endif %}
             </div>
 

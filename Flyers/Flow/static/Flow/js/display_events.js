@@ -36,15 +36,19 @@ function printEvent(ev_model) {
 
     elemTitle.innerText = ev["title"]
     elemDesc.innerText = "description : "+ev["description"]
-    elemDateEv.innerText = "date : "+ev["date"]
+    elemDateEv.innerText = ev["date"]
     elemCreator.innerText = "organisateur : "+ev["created_by"]
     const jour = ev["created_at"][8]+ev["created_at"][9]
     const mois = ev["created_at"][5]+ev["created_at"][6]
     const annee = ev["created_at"][0]+ev["created_at"][1]+ev["created_at"][2]+ev["created_at"][3]
     elemDateCreation.innerText = "date de création : "+jour+"/"+mois+"/"+annee+" à "+ev["created_at"][11]+ev["created_at"][12]+"h"+ev["created_at"][14]+ev["created_at"][15]
+    let divImg = document.createElement("div")
+    divImg.className = "divImg"
     let img = ev["image"]
     elemImg.src = `./media/${img}`
 
+    let divLikes = document.createElement("div")
+    divLikes.className = "divLikes"
     elemLikes.class = "btn-likes"
     elemLikes.addEventListener("click", function(e) {
         const elementId = ev_model.pk; // id de l'élément qu'on souhaite mettre à jour
@@ -73,14 +77,17 @@ function printEvent(ev_model) {
     });
     elemLikes.innerText = "Likes : " + ev["Likes"].toString()
 
+    elem.appendChild(elemDateEv)
     elem.appendChild(elemTitle)
     elem.appendChild(elemDesc)
-    elem.appendChild(elemDateEv)
     elem.appendChild(elemCreator)
     elem.appendChild(elemDateCreation)
-    elem.appendChild(elemImg)
+    divImg.appendChild(elemImg)
+    console.log(divImg)
+    elem.appendChild(divImg)
     elem.appendChild(elemRoadmap)
-    elem.appendChild(elemLikes)
+    divLikes.appendChild(elemLikes)
+    elem.appendChild(divLikes)
 
     return elem
 }
@@ -89,6 +96,6 @@ for (let i = 0; i < list_events.length; i++) {
     const ev_model = list_events[i] // on récupère le prochain événement de la DB
     console.log(ev_model)
     section_events.appendChild(printEvent(ev_model))
-    const espace = document.createElement("br")
-    section_events.appendChild(espace)
+    /*const espace = document.createElement("br")
+    section_events.appendChild(espace)*/
 }

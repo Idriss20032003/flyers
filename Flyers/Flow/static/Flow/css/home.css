@@ -6,10 +6,21 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+
 .accueil {
     display: flex;
     flex-direction: row;
     /*flex-grow: 1;*/
+}
+
+a {
+    color: inherit; /* Utilise la couleur du texte par défaut */
+    text-decoration: none; /* Désactive le soulignement */
+}
+
+a:hover {
+    color: #ff0000; /* Couleur du texte lorsqu'il est survolé */
+    text-decoration: underline; /* Soulignement lorsqu'il est survolé */
 }
 
 .connexion {
@@ -19,6 +30,17 @@ body {
     padding: 15px;
     border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
     text-align: center;
+}
+
+.fly_ton_event {
+    flex: 1.5;
+    text-align: center;
+    border-radius: 30px;
+    border-color: rgb(0, 0, 0);
+    background-color: rgb(29, 155, 240);
+    padding: 15px;
+    text-decoration: none;
+    /*: 5px solid #edebeb;*/
 }
 
 .flux {
@@ -53,18 +75,8 @@ body {
     /*flex: 1;*/
 	/*margin: 8px;*/
     display: grid;
+    align-items: center;
     gap: 5px;
-}
-
-.events_flow img {
-	/*max-width: 200px;*/
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.events_flow p {
-	margin-top: 4px;
-	margin-bottom: 4px;
 }
 
 .events_flow article {
@@ -75,8 +87,33 @@ body {
 	padding: 4px;
     /*border-radius: 5px;*/
     border-top: 1px solid #edebeb;
+    gap: 2px;
 }
 
 .events_flow h3 {
     text-align: center;
 }
+
+.divImg {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.events_flow img {
+	max-width: 300px;
+    max-height: 500px;
+}
+
+.events_flow p {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.divLikes {
+    display: flex;
+    flex-direction: row;
+}
+
+

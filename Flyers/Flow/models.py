@@ -5,8 +5,19 @@ from Authentication.models import Utilisateur
 
 
 class Event(models.Model):
+    EVENT_TYPES = [
+        	('conference', 'Conférence'),
+            ('workshop', 'Atelier'),
+            ('meetup', 'Rencontre'),
+            ('party', 'Soirée'),
+            ('spectacle', 'Spectacle'),
+            ('sport', 'Sport'),
+            ('other', 'Autre')
+    ]
+
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=500, default='')
+    event_type = models.CharField(max_length=20, choices=EVENT_TYPES, default='other')
     date = models.DateField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)

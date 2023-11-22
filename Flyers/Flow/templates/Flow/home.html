@@ -12,7 +12,6 @@
 
     <div class="accueil">
         <div class="connexion">
-            <p>Onglet de connexion</p>
             {% if user.is_authenticated %}
             <p> <a href="{% url 'GroupPage' %}">Communautés</a> </p>
             {% else %}
@@ -48,9 +47,9 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <form action="" method="post" novalidate>
+                    <form action="" method="get" novalidate>
                         {% csrf_token %}
-                        {{ form }}
+                        {{ form.as_p }}
                         <input type="submit" value="Envoyer">
                     </form>
                 {% endif %}

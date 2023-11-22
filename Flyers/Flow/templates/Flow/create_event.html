@@ -1,26 +1,56 @@
+{% extends 'Flow/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ma page HTML</title>
-    <!-- Inclusion du fichier JavaScript -->
-</head>
+{% block head %}
+<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
+<link href="{% static 'Authentication/css/styles.css' %}" rel="stylesheet" />
 
-<body>
-<div>
-    <h1>Fly ton initiative</h1>
+{% endblock %}
+{% block content %}
+    <div class="form-container-fly">
+        <h1>Fly ton initiative</h1>
+        <form method = 'post' id ='Cevent' novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <p class="error-message">Saisies invalides. Veuillez réessayer.</p>
+            {% endif %}
+            {% for field in event_form %}
+                <div class="form-group">
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% for field in tag_form %}
+                <div class="form-group">
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button class="button-login" type="submit" >Envoyer</button>
+        </form>
+    </div>
+{% endblock %}
 
- <form method = 'post' id ='Cevent' novalidate enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ event_form.as_p }}
-      {{ tag_form.as_p }}
-      
-      <input type="submit" value="Envoyer">
-    </form>
 
-</div>
-
+{% block script %}
 <script src="../../static/Flow/js/flow.js"></script>
+{% endblock %}
 
-
-</body>

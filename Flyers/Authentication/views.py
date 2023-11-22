@@ -30,7 +30,6 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse('profile')  # Obtient l'URL à partir du nom de la route
 
-
 def show_profile(request):
     if request.user.is_authenticated:
         user = Utilisateur.objects.get(user=request.user)

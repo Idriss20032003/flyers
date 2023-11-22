@@ -16,6 +16,7 @@ urlpatterns = [
     path('Groups/', Chat.views.GroupPage, name='GroupPage'),
     path('api/create-room/<int:eId>/',Chat.views.create_room, name='create-room'),
     path('create_event/', Flow.views.createEvent, name='create_event'),
+    #path('login/', Authentication.views.login, name='login'),
     path('login/', Authentication.views.CustomLoginView.as_view(), name='login'),
     path('event/<int:eId>/', Flow.views.show_event, name='event'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),

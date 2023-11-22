@@ -91,7 +91,6 @@
                     </ul>
                 {% else %}
                     <form action="" method="get" novalidate>
-                        {% csrf_token %}
                         {{ form.as_p }}
                         <input type="submit" value="Envoyer">
                     </form>

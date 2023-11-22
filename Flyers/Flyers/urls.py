@@ -24,8 +24,9 @@ urlpatterns = [
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
     path('Room_chat/<int:eId>/', Chat.views.Room_chat, name='Room_chat'),
     path('joinEvent/<int:eId>/', Flow.views.joinEvent, name='joinEvent'),
-    path('JoinEventConfirm/<int:eId>/',
-         Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
+    path('JoinEventConfirm/<int:eId>/',Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
+    path('profile/', include('Authentication.urls')),
+    path('update-like/', Flow.views.update_like, name='update-like'),
 
 ]
 

@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from .models import Event
-from .models import Like
+from .models import *
 from .forms import *
 from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse
@@ -86,7 +85,6 @@ def update_like(request):
 
     # Réponse JSON indiquant que l'utilisateur a déjà aimé
     return JsonResponse({'success': False, 'new_likes': 0})
-
 
 @login_required
 def createEvent(request):

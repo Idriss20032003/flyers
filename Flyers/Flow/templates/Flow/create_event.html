@@ -10,7 +10,7 @@
 <div>
     <h1>Fly ton initiative</h1>
 
- <form id='Cevent' novalidate enctype="multipart/form-data">
+ <form method = 'post' id ='Cevent' novalidate enctype="multipart/form-data">
       {% csrf_token %}
       {{ event_form.as_p }}
       {{ tag_form.as_p }}

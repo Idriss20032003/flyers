@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.eId = self.scope['url_route']['kwargs']['eId']
         self.group_event_id = f'chat_{self.eId}'
         user = self.scope['user']
-        user_id = user.id if user.is_authenticated else 'Anonymous'
+        user_id = user.id if user.is_authenticated else None
         await self.accept()
 
         await self.get_room()

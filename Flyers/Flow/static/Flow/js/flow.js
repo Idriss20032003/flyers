@@ -1,8 +1,7 @@
 // ELEMENTS DU DOM HTML
 //////////////////////////////////////////////////////////////////:
 
-let EventCreated = document.getElementById('Cevent')    
-console.log(EventCreated);
+
 
 let eId = null; 
 
@@ -80,8 +79,8 @@ if (chatSubmitElement) {
             chatInputElement.value = '';
         } else {
         }
-    });
-
+    });}
+    if (chatInputElement) {
     chatInputElement.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -102,7 +101,8 @@ if (chatSubmitElement) {
 
 // chatlOG correspondra en html à la zone d'affichage des messages 
 // Si c'est l'utilisateur connecté qui envoie le message, alors il s'affiche à gauche, sinon à droite
-
+let EventCreated = document.getElementById('Cevent')    
+console.log(EventCreated);
 EventCreated.addEventListener('submit', function (event) {    
 
     event.preventDefault(); 

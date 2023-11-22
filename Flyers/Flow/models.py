@@ -17,9 +17,8 @@ class Event(models.Model):
 
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=500, default='')
-    event_type = models.CharField(max_length=20, choices=EVENT_TYPES, default='other')
+    event_type = models.CharField(max_length=20, choices=EVENT_TYPES, default='other',null=True)
     date = models.DateField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     is_paid_event = models.BooleanField(default=False)
     ticket_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
@@ -36,11 +35,9 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Tags(models.Model):
-<<<<<<< HEAD
     created_at = models.DateTimeField(default=timezone.now)
     tag = models.CharField(max_length=20)
-    event = models.ManyToManyField(Event,  related_name= 'tag')
-    events = models.ManyToManyField(Event, related_name='tags')
+    event = models.ManyToManyField(Event, related_name='tag')
     nb_events = models.PositiveIntegerField(default=0)
     
 class Reservation(models.Model):
@@ -53,11 +50,6 @@ class TinyCart(models.Model):
     client = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True, related_name='cart')
     created_at = models.DateTimeField(default=timezone.now)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-=======
     tags = models.CharField(max_length=20)
     event = models.ManyToManyField(Event,  related_name= 'tags', blank = True)
 
-
-# IL FAUT POUVOIR ACCEDER AU GROUPE DE DISCUSSION SSI ON FAIT PARTIE DE L'EVENT !
->>>>>>> origin/lucien_3

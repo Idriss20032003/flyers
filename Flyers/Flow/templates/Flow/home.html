@@ -4,9 +4,9 @@
 <html>
     <head>
         <title>Flux</title>
-        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
         <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
         <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
+        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
     </head>
 <body>
 
@@ -17,23 +17,29 @@
             {% else %}
             <a href="{% url 'login' %}">Communautés</a>
             {% endif %}
+
+            <div>
+                {% if user.is_authenticated %}
+                <div class="fly_ton_event">
+                <p><a href="{% url 'create_event' %}">Fly ton event</a></p>
+                </div>
+                {% else %}
+                <div class="fly_ton_event">
+                <p><a href="{% url 'login' %}">Fly ton event</a></p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if user.is_authenticated %}
+            <p> Vous êtes connecté. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
+            {% endif %}
         </div>
         
         <div class="flux">
 
-            <div>
-                {% if user.is_authenticated %}
-                <p><a href="{% url 'create_event' %}">Fly ton event</a></p>
-                {% else %}
-                <a href="{% url 'login' %}">Fly ton event</a>
-                {% endif %}
-            </div>
-
             <section class="events_flow">
             </section>
-            {% if user.is_authenticated %}
-            <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-            {% endif %}
+            
         </div>
 
         <div class="recherche">

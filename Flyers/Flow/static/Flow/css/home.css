@@ -6,18 +6,41 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+
 .accueil {
     display: flex;
     flex-direction: row;
     /*flex-grow: 1;*/
 }
 
+a {
+    color: inherit; /* Utilise la couleur du texte par défaut */
+    text-decoration: none; /* Désactive le soulignement */
+}
+
+a:hover {
+    color: #ff0000; /* Couleur du texte lorsqu'il est survolé */
+    text-decoration: underline; /* Soulignement lorsqu'il est survolé */
+}
+
 .connexion {
     display: flex;
+    flex-direction: column;
     flex: 1;
     padding: 15px;
     border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
     text-align: center;
+}
+
+.fly_ton_event {
+    flex: 1.5;
+    text-align: center;
+    border-radius: 30px;
+    border-color: rgb(0, 0, 0);
+    background-color: rgb(29, 155, 240);
+    padding: 15px;
+    text-decoration: none;
+    /*: 5px solid #edebeb;*/
 }
 
 .flux {
@@ -28,7 +51,6 @@ body {
     border-right: 1px solid #edebeb; /* Ajoute une bordure à droite de chaque élément */
     /*text-align: center;*/
 }
-
 
 .recherche {
     display: flex;
@@ -53,11 +75,35 @@ body {
     /*flex: 1;*/
 	/*margin: 8px;*/
     display: grid;
+    align-items: center;
     gap: 5px;
 }
 
+.events_flow article {
+	/*border: 1px solid #edebeb;*/
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+	padding: 4px;
+    /*border-radius: 5px;*/
+    border-top: 1px solid #edebeb;
+    gap: 2px;
+}
+
+.events_flow h3 {
+    text-align: center;
+}
+
+.divImg {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .events_flow img {
-	max-width: 200px;
+	max-width: 300px;
+    max-height: 500px;
 }
 
 .events_flow p {
@@ -65,13 +111,9 @@ body {
 	margin-bottom: 4px;
 }
 
-.events_flow article {
-	/*border: 1px solid #edebeb;*/
-	padding: 4px;
-    /*border-radius: 5px;*/
-    border-top: 1px solid #edebeb;
+.divLikes {
+    display: flex;
+    flex-direction: row;
 }
 
-.events_flow h3 {
-    text-align: center;
-}
+

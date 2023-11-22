@@ -10,19 +10,34 @@
     </head>
     <body>
         <h1 class="">Bonjour {{ user.name }}</h1>
-        <p>{{ user.email }}</p>
+        <p class="texte">{{ user.email }}</p><br>
         {% if user.avatar %}
-            <img class="" src="{{ user.avatar.url }}" alt="Profile Picture">
+            <img class="profile-picture" src="{{ user.avatar.url }}" alt="Profile Picture">
         {% else %}
-            <img class="" src="{% static 'Authentication/img/avatar/default.jpg' %}" alt="Profile Picture">
+            <img class="profile-picture" src="{% static 'Authentication/img/avatar/default.jpg' %}" alt="Profile Picture">
         {% endif %}
+        <br>
+        {%if not user.is_validated_money_man and not user.money_man_request_pending%}
         <form action="{% url 'demande_validation'%}" method="POST">
             {% csrf_token %}
-            <button type="submit" class="">Demander à pouvoir recevoir des paiements</button>
+            <button type="submit" class="bouton">Demander à pouvoir recevoir des paiements</button>
         </form>
+        {%endif%}
+        {%if user.money_man_request_pending%}
+            <p class="texte">Vous êtes en attente de validation pour recevoir des paiements</p>
+        {%endif%}
+        {%if user.is_validated_money_man and not user.money_man_request_pending%}
+            <p class="texte">Vous pouvez recevoir des paiements</p>
+        {%endif%}
+        {% if user.is_validated_money_man %}
+            <form action="{% url 'create_stripe_connect_account' %}" method="post">
+                {% csrf_token %}
+                <button class="bouton" type="submit">Créer un compte Connect</button>
+            </form>
+        {% endif %}
         <form action="{% url 'modify_profile'%}" method="get">
             {% csrf_token %}
-            <button type="submit" class="">Editer mon profil</button>
+            <button type="submit" class="bouton">Editer mon profil</button>
         </form>
     </body>
 </html>

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from Authentication.models import Utilisateur
+
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
@@ -9,6 +11,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     is_paid_event = models.BooleanField(default=False)
+    ticket_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     money_man = models.ForeignKey(User, on_delete=models.CASCADE, related_name='money_man', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(verbose_name='Illustration', null=True, blank=True)
@@ -24,8 +27,15 @@ class Tags(models.Model):
     events = models.ManyToManyField(Event, related_name='tags')
     nb_events = models.PositiveIntegerField(default=0)
     
+class Reservation(models.Model):
+    client = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True, related_name='reservations')
+    created_at = models.DateTimeField(default=timezone.now)
+    is_paid = models.BooleanField(default=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
-
-
+class TinyCart(models.Model):
+    client = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True, related_name='cart')
+    created_at = models.DateTimeField(default=timezone.now)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
 # IL FAUT POUVOIR ACCEDER AU GROUPE DE DISCUSSION SSI ON FAIT PARTIE DE L'EVENT !

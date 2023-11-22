@@ -1,0 +1,104 @@
+@font-face {
+font-family: 'Roboto-Medium';
+src: url('/static/Flow/assets/fonts/Roboto-Medium.ttf');
+font-weight: normal;
+font-style: normal;
+}
+
+@font-face {
+font-family: 'Roboto-Regular';
+src: url('/static/Flow/assets/fonts/Roboto-Regular.ttf');
+font-weight: normal;
+font-style: normal;
+}
+
+h1{
+font-size: 45px;
+font-weight: 600;
+line-height: 1.15em;
+margin-bottom: 20px;
+color: #25282b;
+font-family: 'Roboto-Medium';
+}
+
+h2{
+font-size: 30px;
+font-weight: 600;
+line-height: 1.15em;
+margin-bottom: 20px;
+color: #25282b;
+font-family: 'Roboto-Medium';
+}
+p{
+font-size: 20px;
+font-family: 'Roboto-Regular';
+}
+
+i{
+    margin-right: 20px;
+}
+/*********** NAV ************************************************/
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    height: 80px;
+    padding-right: 50px;
+}
+
+.left-navbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: fit-content;
+}
+
+.right-navbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: fit-content;
+}
+
+.link-nav{
+    text-decoration: none;
+    font-family: 'Roboto-Regular';
+    line-height: 42px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 25px;
+    background: 0 0;
+    border: 2px solid #222;
+    color: #222;
+    display: inline-block;
+    transition: all .3s ease 0s;
+    cursor: pointer;
+    position: relative;
+    font-size: 18px;
+    margin-right: 20px;
+  }
+  
+  .link-nav:hover{
+    background-color: #222;
+    color: #fff;
+  }
+
+  .logo{
+      margin-left: 20px;
+  }
+  .logo img{
+    height: 70px;
+  }

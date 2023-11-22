@@ -12,22 +12,22 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Flow.views.home, name='home'),
+    path('search/', Flow.views.show_results, name='search'),
     path('Groups/', Chat.views.GroupPage, name='GroupPage'),
-    path('api/create-room/<int:eId>/',
-         Chat.views.create_room, name='create-room'),
+    path('api/create-room/<int:eId>/',Chat.views.create_room, name='create-room'),
     path('create_event/', Flow.views.createEvent, name='create_event'),
-    #path('login/', Authentication.views.login_page, name='login'),
     path('login/', Authentication.views.CustomLoginView.as_view(), name='login'),
-    #path('logout/', Authentication.views.logout_user, name='logout'),
+    path('event/<int:eId>/', Flow.views.show_event, name='event'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('signin/', Authentication.views.register, name='signin'),
     path('GroupPage/', Chat.views.GroupPage, name='GroupPage'),
     path('Room_chat/<int:eId>/', Chat.views.Room_chat, name='Room_chat'),
     path('joinEvent/<int:eId>/', Flow.views.joinEvent, name='joinEvent'),
     path('JoinEventConfirm/<int:eId>/',Flow.views.JoinEventConfirm, name='JoinEventConfirm'),
+    path('payment_cancel/', Authentication.views.payment_cancel, name='payment_cancel'),
     path('profile/', include('Authentication.urls')),
     path('update-like/', Flow.views.update_like, name='update-like'),
-
+    path('checkout/<int:event_id>/', Authentication.views.checkout, name='buy_ticket'),
 ]
 
 if settings.DEBUG:

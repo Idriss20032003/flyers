@@ -10,52 +10,40 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_POST, require_GET
 
-# Create your views here.
-
 # rendu de la page home
 def home(request):
-    empty_search = True
-    events = Event.objects.all()
+    events = Event.objects.all().order_by('-created_at')
     form = SearchForm(request.GET)
-    if request.method == "GET":
+    return render(request,'Flow/home.html', {'events': events, 'form': form})
+
+def show_results(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
         if form.is_valid():
-            #renvoie un dictionnaire des données du formulaire
             search_query = form.cleaned_data
-            tags_list = ['#' + tag.strip() for tag in search_query['tag'].split('#') if tag.strip()]
+            results = Event.objects.all()
 
-            #test si une recherche a été faite
-            for  value in search_query.values():
-                if value not in ([], '', None):
-                    empty_search = False
-                    break
-            
-            if not empty_search :
-                if search_query['tags']:
-                    tags_list = ['#' + tag.strip() for tag in search_query['tag'].split('#') if tag.strip()]
-                    results = Event.objects.filter(title__icontains=search_query['title'], 
-                                                   date=search_query['date'],
-                                                   event_type=search_query['event_type'], 
-                                                   tags__tags__in=tags_list)
-                else:
-                    results = Event.objects.filter(title__icontains=search_query['title'], 
-                                                   date=search_query['date'], 
-                                                   event_type=search_query['event_type'])
-                
-                list_events = serializers.serialize("json", results)
-                # Si des résultats sont trouvés, redirigez vers search_results.html
-                return render(request, 'Flow/home.html', {'form': form, 'list_events': list_events})
+            # Filtre par titre
+            if search_query.get('title'):
+                results = results.filter(title__icontains=search_query['title'])
 
-    # Si aucune recherche n'a été effectuée ou si aucun résultat n'a été trouvé,
-    # ou si la recherche a été effectuée avec succès, mais sans résultat, affichez home.html    
-    form = SearchForm()
-    list_events = serializers.serialize("json", events)
-    empty_search = True
+            # Filtre par date
+            if search_query.get('date'):
+                results = results.filter(date=search_query['date'])
 
-    return render(request,
-                  'Flow/home.html',
-                  {'events': events, 'form': form, 'list_events': list_events})
+            # Filtre par tags
+            if search_query.get('tags'):
+                tags_list = ['#' + tag.strip() for tag in search_query['tags'].split('#') if tag.strip()]
+                results = results.filter(tags__tag__in=tags_list)
 
+            # Filtre par type d'événement
+            if search_query.get('event_type'):
+                results = results.filter(event_type=search_query['event_type'])
 
+            results = results.order_by('-created_at')
+            return render(request, 'Flow/search_result.html', {'list_events': results})
+
+    return redirect("home")
 
 # mise à jour du nombre de likes d'un event
 
@@ -153,8 +141,17 @@ def JoinEventConfirm(request, eId):
     user = request.user
     event = Event.objects.get(id=eId)
     event.members.add(user)
+    events = Event.objects.all().order_by('-created_at')
+    form = SearchForm(request.GET)
     return render(request, 'Flow/home.html', {
         "eId": eId,
         "user": user,
-        'event': event
+        'event': event,
+        'events': events,
+        'form': form
     })
+
+def show_event(request, eId):
+    event = Event.objects.get(id=eId)
+    user_is_member = request.user in event.members.all()
+    return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member})

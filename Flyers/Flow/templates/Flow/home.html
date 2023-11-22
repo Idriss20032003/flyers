@@ -1,63 +1,53 @@
+{% extends 'Flow/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Flyers</title>
-        <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
-        <script> 
-            var list_events = JSON.parse('{{ list_events|escapejs}}')
-        </script>
-        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
-    </head>
-<body>
+{% block head %}<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />{% endblock %}
+
+{% block content %}
     <div class="global-container">
         <h1>Accueil</h1>
-        {% if user.is_authenticated %}
-            <a href="{% url 'GroupPage' %}" id="OuvertureGroupes">Communautés</a>
-            <a href="{% url 'create_event' %}" id="fly">Fly ton event</a>
-            <p> Vous êtes connecté. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-        {% else %}
-            <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
-        {% endif %} 
-
-        
             
-        <div class="accueil">
-            <div class="events-container">
-                {% for event in events %}
-                <div>
-                    <h2>{{event.title}}</h2>
-                    <p> {{event.description}}</p>
-                    <p> Créateur : {{event.created_by}}</p>
-                    <p> Créé le : {{event.created_at}}</p>
-                    <a href = "{% url 'joinEvent' event.id %}"><button class="Join" attr="{{event.id}}">Rejoinddre</button></a>
-                    <button class="B">Financer</button>
+        <h2>Les derniers events</h2>
+
+        <div class="search_form">
+            
+            <form action="{% url 'search' %}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <span class="field">{{ field }}</span>
+                {% endfor %}
+                <button class="button-search" id="button-search" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        {% if request.user.is_authenticated and eId %}
+        <div class="success-box">
+            <span>Vous avez bien rejoint l'event !</span>
+        </div>
+         {% endif %}   
+        <div class="events-container">
+            {% for event in events %}
+                <div class="event-card">
+                    <div class="infos-event">
+                        <h2>{{event.title}}</h2>
+                        <p> {{event.description}}</p>
+                        <p><i class="fas fa-user icon"></i>{{ event.created_by }}</p>
+                        <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
+                        <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
+
+                        {% if event.is_paid_event %}
+                            <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
+                        {% else %}
+                            <p><i class="fas fa-tag icon"></i>Gratuit!</p>
+                        {% endif %}
+                        <a class="join-link"  href = "{% url 'event' event.id %}"><button attr="{{event.id}}">Détails</button></a>
+                    </div>
+                    <img src="{{event.image.url}}" alt="Photo de l'event">
                 </div>
             {% endfor %}  
-            </div>
-            <div class="recherche">
-                <h2>Recherche</h2>
-                <div class="search_form">
-                    {% if results %}
-                        <h2>Search Results</h2>
-                        <ul>
-                            {% for event in results %}
-                                <li>{{ event.title }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <form action="" method="get" novalidate>
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <input type="submit" value="Envoyer">
-                        </form>
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
+{% endblock %}
 
-    <script src="../../static/Flow/js/flow.js"></script>
 
-</body>
-</html>
+{% block script %}
+<script src="../../static/Flow/js/flow.js"></script>
+{% endblock %}

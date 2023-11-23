@@ -87,7 +87,7 @@
 .event-card{
     margin-bottom: 20px;
     border: 1px solid #cccccc99;
-    border-radius: 5px;
+    border-radius: 20px;
     padding: 40px;
     background-color: #e3e7eca9;
     transition: all .3s ease 0s;

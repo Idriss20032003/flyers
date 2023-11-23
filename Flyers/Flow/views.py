@@ -55,7 +55,6 @@ def show_results(request):
 def update_like(request):
     # Récupérez l'ID de l'élément à mettre à jour depuis la requête POST
     element_id = request.POST.get('element_id')
-    print("EFDZFSZFEZ " + element_id)
     user = request.user
 
     # Vérifiez si l'utilisateur a déjà aimé le contenu

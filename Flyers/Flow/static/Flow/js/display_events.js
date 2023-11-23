@@ -1,4 +1,5 @@
-const section_events = document.querySelector(".events_flow");
+const section_events = document.querySelectorAll(".event-card");
+console.log("eee")
 
 //let actuals = JSON.parse('{{ list_events }}')
 //let list_events = document.getElementById("list_events")
@@ -24,17 +25,18 @@ function getCookie(name) {
 
 function printEvent(ev_model) {
     const ev = ev_model["fields"]
-    const elem = document.createElement("article")
+    const divLikes = document.getElementById(ev.id)
+    /*const elem = document.createElement("article")
     const elemTitle = document.createElement("h3")
     const elemDesc = document.createElement("p")
     const elemDateEv = document.createElement("p")
     const elemCreator = document.createElement("h4")
     const elemDateCreation = document.createElement("p")
     const elemImg = document.createElement("img")
-    const elemRoadmap = document.createElement("div")
+    const elemRoadmap = document.createElement("div")*/
     const elemLikes = document.createElement("button")
 
-    elemTitle.innerText = ev["title"]
+    /*elemTitle.innerText = ev["title"]
     elemDesc.innerText = "description : "+ev["description"]
     elemDateEv.innerText = ev["date"]
     elemCreator.innerText = "organisateur : "+ev["created_by"]
@@ -45,11 +47,11 @@ function printEvent(ev_model) {
     let divImg = document.createElement("div")
     divImg.className = "divImg"
     let img = ev["image"]
-    elemImg.src = `./media/${img}`
+    elemImg.src = `./media/${img}`*/
 
-    let divLikes = document.createElement("div")
-    divLikes.className = "divLikes"
-    elemLikes.class = "btn-likes"
+    //let divLikes = document.createElement("div")
+    //divLikes.className = "event-card-likes"
+    //elemLikes.class = "btn-likes"
     elemLikes.addEventListener("click", function(e) {
         const elementId = ev_model.pk; // id de l'élément qu'on souhaite mettre à jour
         console.log(elementId)
@@ -77,7 +79,7 @@ function printEvent(ev_model) {
     });
     elemLikes.innerText = "Likes : " + ev["Likes"].toString()
 
-    elem.appendChild(elemDateEv)
+    /*elem.appendChild(elemDateEv)
     elem.appendChild(elemTitle)
     elem.appendChild(elemDesc)
     elem.appendChild(elemCreator)
@@ -85,17 +87,17 @@ function printEvent(ev_model) {
     divImg.appendChild(elemImg)
     console.log(divImg)
     elem.appendChild(divImg)
-    elem.appendChild(elemRoadmap)
+    elem.appendChild(elemRoadmap)*/
     divLikes.appendChild(elemLikes)
-    elem.appendChild(divLikes)
+    //elem.appendChild(divLikes)
 
-    return elem
+   //return elem
 }
 
-for (let i = 0; i < list_events.length; i++) {
-    const ev_model = list_events[i] // on récupère le prochain événement de la DB
-    console.log(ev_model)
-    section_events.appendChild(printEvent(ev_model))
+for (let i = 0; i < events.length; i++) {
+    const ev_model = events[i] // on récupère le prochain événement de la DB
+    console.log("eee")
+    printEvent(ev_model)
     /*const espace = document.createElement("br")
     section_events.appendChild(espace)*/
 }

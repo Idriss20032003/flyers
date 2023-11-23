@@ -39,6 +39,7 @@
                         {% endif %}
                         <a class="join-link"  href = "{% url 'event' event.id %}"><button attr="{{event.id}}">Détails</button></a>
                     </div>
+                    <div class="event-card-likes" id="{{event.id}}"></div>
                     <img src="{{event.image.url}}" alt="Photo de l'event">
                 </div>
             {% endfor %}  
@@ -49,4 +50,5 @@
 
 {% block script %}
 <script src="../../static/Flow/js/flow.js"></script>
+<script src="../../static/Flow/js/display_events.js"></script>
 {% endblock %} 

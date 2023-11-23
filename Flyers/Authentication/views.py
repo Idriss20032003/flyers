@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -36,9 +35,24 @@ class CustomLoginView(LoginView):
 def show_profile(request):
     if request.user.is_authenticated:
         user = Utilisateur.objects.get(user=request.user)
-        return render(request, 'Authentication/show_profile.html', {'user': user})
+        events = Event.objects.filter(members=request.user).exclude(created_by = request.user).order_by('-date')
+        events_created = Event.objects.filter(
+            created_by=request.user
+        ).order_by('-date')
+        return render(request, 'Authentication/show_profile.html', {'user': user, 'events': events, 'events_created': events_created})
     else:
         return render(request, 'Authentication/signin.html')
+
+def show_profile_other(request, id):
+    user = User.objects.get(id=id)
+    if request.user == user:
+        return redirect('profile')
+    utilisateur = Utilisateur.objects.get(user=user)
+    events = Event.objects.filter(members=user).exclude(created_by = user).order_by('-date')
+    events_created = Event.objects.filter(
+        created_by=user
+    ).order_by('-date')
+    return render(request, 'Authentication/show_profile_other.html', {'user': utilisateur, 'events': events, 'events_created': events_created})
 
 
 def modify_profile(request):
@@ -129,23 +143,6 @@ def checkout(request, event_id):
     )
 
     return redirect(session.url, code=303)
-
-
-def payment_success(request):
-    if request.user.is_authenticated:
-        client = Utilisateur.objects.get(user=request.user)
-        cart = TinyCart.objects.get(client=client)
-
-        # Créer une nouvelle commande
-        reservation = Reservation.objects.create(
-            client=client,
-            total_price=cart.total_price,
-            is_paid=True
-        )
-
-        return render(request, 'Authentication/payment_success.html')
-    else:
-        return redirect('login')
 
 
 def payment_cancel(request):

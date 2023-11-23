@@ -36,7 +36,8 @@ def show_results(request):
             # Filtre par tags
             if search_query.get('tags'):
                 tags_list = ['#' + tag.strip() for tag in search_query['tags'].split('#') if tag.strip()]
-                results = results.filter(tags__tag__in=tags_list)
+                for tag in tags_list:
+                    results = results.filter(tag__tag__contains=tag)
 
             # Filtre par type d'événement
             if search_query.get('event_type'):
@@ -81,7 +82,7 @@ def update_like(request):
 def createEvent(request):
     if request.method == 'POST':
         # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS
-        event_form = EventForm(request.POST)
+        event_form = EventForm(request.POST, request.FILES)
         tag_form = TagForm(request.POST)
 
         if event_form.is_valid() and tag_form.is_valid():
@@ -91,14 +92,14 @@ def createEvent(request):
             event.save()
 
             # Enregistrer les tags associés à l'événement
-            tags_data = tag_form.cleaned_data.get('tags', '')
+            tags_data = tag_form.cleaned_data.get('tag', '')
             tags_list = ['#' + tag.strip()
                          for tag in tags_data.split('#') if tag.strip()]
 
             for tag_text in tags_list:
-                tag, created = Tags.objects.get_or_create(tags=tag_text)
+                tag, created = Tags.objects.get_or_create(tag=tag_text)
                 tag.save()
-                event.tags.add(tag)
+                event.tag.add(tag)
 
             event.members.add(request.user)
 
@@ -161,5 +162,28 @@ def show_event(request, eId):
     return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member})
 
 def Roadmap_seeOnly(request, eId):
-    event = Event.objects.get(id = eId)
-    return render(request, 'Flow/Roadmap_seeOnly.html', {'event': event})
+    event = Event.objects.get(id=eId)
+    return render(request, 'Flow/roadmap_seeOnly.html', {'event': event})
+
+def modify_event(request, eId):
+    if request.user.is_authenticated:
+        event = Event.objects.get(id=eId)
+        if request.method == 'POST':
+            form = EventModifyForm(request.POST, request.FILES, instance=event)
+            print(form)
+            if form.is_valid():
+                form.save()
+                return redirect('profile')
+        else:
+            form = EventModifyForm(instance=event)
+        return render(request, 'Flow/modify_event.html', {'form': form, 'event': event})
+    else:
+        return redirect('login')
+    
+def leave_event(request, eId):
+    if request.user.is_authenticated:
+        event = Event.objects.get(id=eId)
+        event.members.remove(request.user)
+        return redirect('event', eId)
+    else:
+        return redirect('login')

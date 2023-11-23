@@ -216,7 +216,7 @@ EventCreated.addEventListener('submit', function (event) {
 
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
-    window.location.href = '/'; // Redirection vers la page d'accueil
+                window.location.href = '/'; // Redirection vers la page d'accueil
 
             };
 

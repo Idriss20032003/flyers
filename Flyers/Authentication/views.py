@@ -52,7 +52,7 @@ def show_profile_other(request, id):
     events_created = Event.objects.filter(
         created_by=user
     ).order_by('-date')
-    return render(request, 'Authentication/show_profile_other.html', {'user': utilisateur, 'events': events, 'events_created': events_created})
+    return render(request, 'Authentication/show_profile_other.html', {'user': user, 'utilisateur': utilisateur, 'events': events, 'events_created': events_created})
 
 
 def modify_profile(request):

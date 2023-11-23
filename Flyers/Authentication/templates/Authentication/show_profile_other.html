@@ -6,19 +6,22 @@
 
 {% block content %}
     <div class="global-container">
-        <h1 class="">Profil de {{ user.name }},</h1>
+        <h1 class="">Profil de {{ utilisateur.name }},</h1>
         <div class="profile-container">
-            
+            <div class="left-section">
+                <p><strong>Nombre d'events créés : </strong>{{ user.events.all.count }}</p>
+                <p><strong>Nombre de participations : </strong>{{ user.joined_events.all.count }}</p>
+            </div>
             <div class="right-section">
-                {% if user.avatar %}
-                    <img class="profile-picture" src="{{ user.avatar.url }}" alt="Profile Picture">
+                {% if utilisateur.avatar %}
+                    <img class="profile-picture" src="{{ utilisateur.avatar.url }}" alt="Profile Picture">
                 {% else %}
                     <img class="profile-picture" src="{% static 'Authentication/img/avatar/default.jpg' %}" alt="Profile Picture">
                 {% endif %}
             </div>
         </div>
         <div class="events-container">
-            <h2>Les événements créés par {{ user.name }}</h2>
+            <h2>Les événements créés par {{ utilisateur.name }}</h2>
             {% for event in events_created %}
                 <div class="event-card">
                     <div class="infos-event">
@@ -39,7 +42,7 @@
             {% endfor %}  
         </div>
         <div class="events-container">
-            <h2>Les événements auxquels {{user.name}} participe</h2>
+            <h2>Les événements auxquels {{utilisateur.name}} participe</h2>
             {% for event in events %}
                 <div class="event-card">
                     <div class="infos-event">

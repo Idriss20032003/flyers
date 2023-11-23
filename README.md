@@ -30,7 +30,7 @@ Il faudra alors entrer le nom d'utilisateur et un mot de passe
 
 ## Description MVP
 
-Le projet ce décompose en trois fonctionnalités : Authentication, Flow et Chat
+Le projet ce décompose en trois fonctionnalités (associées à 3 applications): Authentication, Flow et Chat
 
 - Authentication : partie du code centrée sur l'authentification des utilisateurs c'est à dire la connexion et l'inscription de nouveaux utilisateurs.
 

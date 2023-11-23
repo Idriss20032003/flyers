@@ -13,25 +13,24 @@
         <p> Page d'accueil</p>
         {% if user.is_authenticated %}
         <p> <a href="{% url 'GroupPage' %}" id="OuvertureGroupes">Communautés</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
-      {% endif %}
-    
+        </p>
+        {% else %}
+        <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
+        {% endif %}
     </div>
     
     <div>
         {% if user.is_authenticated %}
         <p><a href="{% url 'create_event' %}" id="fly">Fly ton event</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}">Fly ton event</a>
-      {% endif %}
+        </p>
+        {% else %}
+        <a href="{% url 'login' %}">Fly ton event</a>
+        {% endif %}
 
         <div>
             {% for event in events %}
         <br> 
-        <div> title : {{event.title}}</div>
+        <div>title : {{event.title}}</div>
         <div>description : {{event.description}}</div>
         <div>created by : {{event.created_by}}</div>
         <div>created at : {{event.created_at}}</div>

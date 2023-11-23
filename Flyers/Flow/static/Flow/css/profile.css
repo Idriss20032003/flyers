@@ -1,0 +1,42 @@
+.profile-container{
+    margin-top: 50px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    padding: 40px;
+}
+
+.left-section{
+    align-items: left;
+    margin-right: 40px;
+}
+
+
+.link-profile{
+    margin-bottom: 30px;
+    text-decoration: none;
+    font-family: 'Roboto-Regular';
+    line-height: 42px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 25px;
+    background: 0 0;
+    border: 2px solid #222;
+    color: #222;
+    display: inline-block;
+    transition: all .3s ease 0s;
+    cursor: pointer;
+    position: relative;
+    font-size: 18px;
+    margin-right: 20px;
+  }
+  
+  .link-profile:hover{
+    background-color: #222;
+    color: #fff;
+  }
+
+  .profile-picture{
+    width: 300px;
+  }

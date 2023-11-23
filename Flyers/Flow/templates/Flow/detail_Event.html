@@ -1,0 +1,36 @@
+{% extends 'Flow/base.html' %}
+{% load static %}
+{% block head %}<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />{% endblock %}
+
+{% block content %}
+    <div class="global-container">
+        <a class="link-nav" href="{% url 'home' %}"><i class="fas fa-arrow-left-long"></i> Retour à l'accueil</a>
+        <h1>Détail de l'événement</h1>
+        <div class="event-card-detail">
+            <div class="infos-event">
+                <h2>{{event.title}}</h2>
+                <p> {{event.description}}</p>
+                <p><i class="fas fa-user icon"></i>{{event.created_by}}</p>
+                <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
+                <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
+                {% if not user_is_member %}
+                {% if event.is_paid_event %}
+                    <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
+                    <!--<a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>-->
+                    <a class="join-link"  href = "{% url 'buy_ticket' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>
+                {% else %}
+                    <p><i class="fas fa-tag icon"></i>Gratuit!</p>
+                    <a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Rejoindre</button></a>
+                {% endif %}
+                {% else %}
+                    <p>Vous participez à cet event !</p>
+                {% endif %}
+            </div>
+            <img src="{{event.image.url}}" alt="Photo de l'event">
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script src="../../static/Flow/js/flow.js"></script>
+{% endblock %}

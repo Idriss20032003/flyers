@@ -17,18 +17,21 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Utilisateur.objects.create(user=user, name=form.cleaned_data.get('pseudo'), email=user.username)  # Crée le profil client associé
+            Utilisateur.objects.create(user=user, name=form.cleaned_data.get(
+                'pseudo'), email=user.username)  # Crée le profil client associé
             login(request, user)
-            return redirect('profile')  # Rediriger vers la page d'accueil après l'inscription
+            # Rediriger vers la page d'accueil après l'inscription
+            return redirect('profile')
     else:
         form = CustomUserCreationForm()
     return render(request, 'Authentication/signin.html', {'form': form})
 
+
 class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'Authentication/login.html'
-
-
+    def get_success_url(self):
+        return reverse('profile')  # Obtient l'URL à partir du nom de la route
 
 def show_profile(request):
     if request.user.is_authenticated:
@@ -36,7 +39,8 @@ def show_profile(request):
         return render(request, 'Authentication/show_profile.html', {'user': user})
     else:
         return render(request, 'Authentication/signin.html')
-    
+
+
 def modify_profile(request):
     if request.user.is_authenticated:
         user = Utilisateur.objects.get(user=request.user)
@@ -51,7 +55,8 @@ def modify_profile(request):
         return render(request, 'Authentication/modify_profile.html', {'form': form})
     else:
         return redirect('login')
-    
+
+
 def request_vendor_status(request):
     if request.method == 'POST':
         utilisateur = Utilisateur.objects.get(user=request.user)
@@ -60,16 +65,20 @@ def request_vendor_status(request):
         return redirect('profile')
     return redirect('home')
 
+
 # clé secrète Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
 def create_stripe_connect_account(request):
     if not request.user.is_authenticated:
-        messages.error(request, "Vous n'êtes pas autorisé à effectuer cette action.")
+        messages.error(
+            request, "Vous n'êtes pas autorisé à effectuer cette action.")
         return redirect('profile')
     user = Utilisateur.objects.get(user=request.user)
     if not user.is_validated_money_man:
-        messages.error(request, "Vous n'êtes pas autorisé à effectuer cette action.")
+        messages.error(
+            request, "Vous n'êtes pas autorisé à effectuer cette action.")
         return redirect('profile')
     try:
         # Création du compte Stripe Connect pour l'utilisateur
@@ -77,7 +86,8 @@ def create_stripe_connect_account(request):
             type="express",
             country="FR",
             email=user.email,
-            capabilities={"card_payments": {"requested": True}, "transfers": {"requested": True}},
+            capabilities={"card_payments": {"requested": True},
+                          "transfers": {"requested": True}},
             business_type="individual",
         )
 
@@ -95,29 +105,31 @@ def create_stripe_connect_account(request):
 
         return redirect(account_link.url)
     except stripe.error.StripeError as e:
-        messages.error(request, "Une erreur est survenue lors de la création du compte Stripe.")
+        messages.error(
+            request, "Une erreur est survenue lors de la création du compte Stripe.")
         return redirect('profile')
     
-def checkout(request, cart_id):
-    cart = TinyCart.objects.get(id=cart_id)
+def checkout(request, event_id):
+    event = Event.objects.get(id=event_id)
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
             'price_data': {
                 'currency': 'eur',
                 'product_data': {
-                    'name': 'Panier de produits frais et locaux',
+                    'name': 'Ticket pour l\'event : ' + event.title,
                 },
-                'unit_amount': int(cart.total_price * 100),
+                'unit_amount': int(event.ticket_price * 100),
             },
             'quantity': 1,
         }],
         mode='payment',
-        success_url=request.build_absolute_uri(reverse('payment_success')),
+        success_url=request.build_absolute_uri(reverse('JoinEventConfirm', args=(event_id,))),
         cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
     )
 
     return redirect(session.url, code=303)
+
 
 def payment_success(request):
     if request.user.is_authenticated:
@@ -127,13 +139,14 @@ def payment_success(request):
         # Créer une nouvelle commande
         reservation = Reservation.objects.create(
             client=client,
-            total_price=cart.total_price,  
+            total_price=cart.total_price,
             is_paid=True
         )
 
         return render(request, 'Authentication/payment_success.html')
     else:
         return redirect('login')
+
 
 def payment_cancel(request):
     return render(request, 'Authentication/payment_cancel.html')

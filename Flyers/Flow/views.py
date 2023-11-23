@@ -160,3 +160,7 @@ def show_event(request, eId):
     event = Event.objects.get(id=eId)
     user_is_member = request.user in event.members.all()
     return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member})
+
+def Roadmap_seeOnly(request, eId):
+    event = Event.objects.get(id = eId)
+    return render(request, 'Flow/Roadmap_seeOnly.html', {'event': event})

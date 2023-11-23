@@ -23,6 +23,7 @@ class Event(models.Model):
     description = models.CharField(max_length=500, default='')
     event_type = models.CharField(max_length=20, choices=EVENT_TYPES, default='other',null=True)
     date = models.DateField(default=default_event_date, blank=True)
+    place = models.CharField(max_length=100, default='')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiateur', null=True)
     is_paid_event = models.BooleanField(default=False)
     ticket_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)

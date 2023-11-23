@@ -16,7 +16,7 @@ class TagForm(forms.ModelForm):
 class EventModifyForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'description', 'date', 'image', 'max_members']
+        fields = ['title', 'description', 'date', 'image', 'max_members', 'place', 'ticket_price']
 
 
 EVENT_TYPES = (

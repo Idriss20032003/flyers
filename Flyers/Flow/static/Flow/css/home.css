@@ -175,6 +175,11 @@
     margin-right: auto;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+}
+
 .event-card-detail img{
     max-width: 400px;
     max-height: 100%;

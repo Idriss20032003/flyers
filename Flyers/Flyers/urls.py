@@ -28,7 +28,12 @@ urlpatterns = [
     path('payment_cancel/', Authentication.views.payment_cancel, name='payment_cancel'),
     path('profile/', include('Authentication.urls')),
     path('update-like/', Flow.views.update_like, name='update-like'),
-    path('checkout/<int:event_id>/', Authentication.views.checkout, name='buy_ticket'),
+    path('member_profile/<int:id>/',
+         Chat.views.member_profile, name='member_profile'),
+    path('Roadmap/<int:eId>/',
+         Chat.views.Roadmap, name='Roadmap'),
+    path('Roadmap_seeOnly/<int:eId>/',
+         Flow.views.Roadmap_seeOnly, name='Roadmap_seeOnly'),    path('checkout/<int:event_id>/', Authentication.views.checkout, name='buy_ticket'),
 ]
 
 if settings.DEBUG:
@@ -36,4 +41,5 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

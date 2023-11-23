@@ -11,6 +11,8 @@ import json
 from django.views.decorators.http import require_POST, require_GET
 
 # rendu de la page home
+
+
 def home(request):
     events = Event.objects.all().order_by('-created_at')
     form = SearchForm(request.GET)
@@ -47,7 +49,8 @@ def show_results(request):
 
 # mise à jour du nombre de likes d'un event
 
-@csrf_exempt  # Vous pouvez utiliser csrf_exempt si vous n'utilisez pas le jeton CSRF (à des fins de démonstration seulement)
+# Vous pouvez utiliser csrf_exempt si vous n'utilisez pas le jeton CSRF (à des fins de démonstration seulement)
+@csrf_exempt
 @require_POST
 def update_like(request):
     # Récupérez l'ID de l'élément à mettre à jour depuis la requête POST
@@ -67,12 +70,13 @@ def update_like(request):
         votre_objet = Event.objects.get(id=element_id)
         votre_objet.Likes += 1
         votre_objet.save()
-        
+
         # Réponse JSON indiquant le succès de la mise à jour
         return JsonResponse({'success': True, 'new_likes': votre_objet.Likes})
 
     # Réponse JSON indiquant que l'utilisateur a déjà aimé
     return JsonResponse({'success': False, 'new_likes': 0})
+
 
 @login_required
 def createEvent(request):
@@ -89,7 +93,8 @@ def createEvent(request):
 
             # Enregistrer les tags associés à l'événement
             tags_data = tag_form.cleaned_data.get('tags', '')
-            tags_list = ['#' + tag.strip() for tag in tags_data.split('#') if tag.strip()]
+            tags_list = ['#' + tag.strip()
+                         for tag in tags_data.split('#') if tag.strip()]
 
             for tag_text in tags_list:
                 tag, created = Tags.objects.get_or_create(tags=tag_text)
@@ -98,12 +103,12 @@ def createEvent(request):
 
             event.members.add(request.user)
 
-            try :
+            try:
                 # Sauvegarder à nouveau l'objet Event pour enregistrer les tags
                 event.save()
             except Exception as e:
                 print(f"Erreur d'enregistrement de l'event : {e}")
-            
+
             # Réponse JSON indiquant que l'événement a été créé
             # A REMPLACER PLUS TARD PAR UN RENDER VERS LA PAGE SPECIFIQUE DE L'EVENT, CELA PERMETTRAIT AU JS DE RECUP L ID DE L'EVENT SPECIFIQUE
             ######################################

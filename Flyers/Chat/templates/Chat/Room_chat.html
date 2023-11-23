@@ -12,9 +12,13 @@
 <div class="zone_body">
 
 <div class="infos/gestion">
+    <b>Membres </b>
     {% for  member in event.members.all %}
+       <a href="{% url 'member_profile' member.id %}"><div class="member"> 
         {{member.username}}
     {% endfor %}
+    <a href="{% url 'Roadmap' room.eId %}"><button>Roadmap</button></a>
+</div></a>
 </div>
 
 <div id="chatLogElement">
@@ -38,10 +42,17 @@
         {% endif %}
 {% endfor %}
 </div>
+<div id="Chat_onwritting"></div>
 </div>
 <div id="chatzone" data-eId="{{ eId }}">
     <input id="chatInputElement" value="">
     <button id="EnvoiMess">Envoyer</button>
+
+    <form id="fileForm">
+        <label for="fileInput"> Médias </label>
+    <input id='fileInput' type='file' accept="image/*">
+<button type="button" id="fileSend">Send</button></form>
+
 </div>
 </body>
 <style>
@@ -56,6 +67,10 @@
     function scrollChatToBottom() {
     chatLogElement.scrollTop = chatLogElement.scrollHeight;
 }
+window.onload = function() {
+    scrollChatToBottom(); // Appeler la fonction pour faire défiler vers le bas au chargement
+};
+
 chatSocket.onmessage = function(e) {
     console.log('onMessage');
     const data = JSON.parse(e.data);

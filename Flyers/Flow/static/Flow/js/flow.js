@@ -20,6 +20,27 @@ function getCookie(name) {
     return cookieValue;
 };
 
+const fileSend = document.getElementById('fileSend')
+const fileInput = document.getElementById('fileInput')
+function sendFile () {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const fileData = e.target.result;
+        const message = {'type': 'image', 'message': fileData};
+        chatSocket.send(JSON.stringify(message));
+
+    };
+    reader.readAsDataURL(file);
+}
+
+if (fileSend) {
+    fileSend.addEventListener('click', function (e){
+e.preventDefault();
+sendFile();
+console.log('photo envoyée avec succès')
+    })
+}
 
 // chatInputElement à utiliser dans le html des groupes
 let chatInputElement = document.getElementById('chatInputElement')
@@ -32,16 +53,30 @@ function sendMessage(){
     //     'type': 'notification',
     //     'message': chatInputElement.value,
     // }));
+
 };
-let chatLogElement = document.getElementById('chatLogElement')
+
+
+let Chat_onwritting =document.getElementById('Chat_onwritting');
+
+let chatLogElement = document.getElementById('chatLogElement');
 function scrollToBottom() {
     chatLogElement.scrollTop = chatLogElement.scrollHeight
 }
+
+function displayImage(imageData) {
+    const imageElement = document.createElement('img');
+    imageElement.src = imageData;  
+    chatLogElement.appendChild(imageElement);}
+
 function onChatMessage(data, user_id = null) {
     console.log('onChatMessage', data)
 
     if (data.type == 'chat_message') {
-        if (user_id == data.sender_id) {
+        if (document.getElementById('is_tiping')) {
+            document.getElementById('is_tiping').remove()
+        }
+        if (user_id == data.user_name) {
             chatLogElement.innerHTML += `<div class="message"> 
                                         <p class="content_message">${data.message}</p> 
                                         <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
@@ -53,7 +88,26 @@ function onChatMessage(data, user_id = null) {
             <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
             </div>` //ajouter le style adéquat!
         }
-    };
+    }
+    else if (data.type == 'writting_active') {
+        if(! user_id==data.user_name){
+            Chat_onwritting.innerHTML=
+        `<div class="is_tiping"><i>${data.user_name} is typing</i></div>` //ajouter le style adéquat!
+        }
+    }
+    else if (data.type == 'chat_image') {
+        // Supposons que vous ayez déjà une connexion WebSocket nommée 'socket'
+        displayImage(data.message);
+        console.log('photo reçue')
+
+// Fonction pour afficher les messages dans la boîte de chat
+
+
+// Fonction pour afficher les images dans la boîte de chat
+
+};
+
+// Gestionnaire d'événements pour les messages WebSocket
 
     // if (data.type == 'chat_notification') {
     //     if (user_id !== data.sender_id){
@@ -61,6 +115,8 @@ function onChatMessage(data, user_id = null) {
     //     }
     // };
 }
+
+
 
 // ENVOI DE MESSAGE PAR L UTILISATEUR EN FRONTEND 
 chatSubmitElement=document.getElementById('EnvoiMess')
@@ -90,6 +146,15 @@ if (chatSubmitElement) {
     });
 }
 
+if (chatInputElement) {
+    chatInputElement.onfocus = function(e) {
+        chatSocket.send(JSON.stringify({
+            'type': 'update',
+            'message': 'writing_active',
+        }))
+    }
+    
+}
 
 // CREATTION DE L'EVENT ET DE LA CHATROOM ASSOCIEE 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +199,7 @@ EventCreated.addEventListener('submit', function (event) {
         if (data) {
             console.log('data', data);
             // Le reste de ton code pour la création du socket, etc.
+            alert(`L'évènement a été créé, retrouvez ses membres dans vos communautés !`)
 
             chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
 
@@ -143,26 +209,24 @@ EventCreated.addEventListener('submit', function (event) {
                 const user_id = data.user_id;
                 console.log('User ID received from server:', user_id);
                 onChatMessage(data, user_id);
+                
 
             };
+
 
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
+    window.location.href = '/'; // Redirection vers la page d'accueil
 
             };
+
 
             chatSocket.onclose = function(e) {
                 console.log('onClose - chat socket was closed');
             };
+
+           
         }
-    });
+    })
 });
-
-
-
-
-
-
-
-
 

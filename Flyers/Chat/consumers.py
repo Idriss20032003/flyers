@@ -58,7 +58,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'created_at': timesince(new_message.created_at)}
             )
 
-        if type == 'notification':
+        elif type == 'image':
+            await self.channel_layer.group_send(
+                self.group_event_id, {
+                    'type': 'chat_image',
+                    'image': message,
+                    'user_name': user_name, }
+            )
+
+        elif type == 'notification':
             await self.channel_layer.group_send(
                 self.group_event_id, {
                     'type': 'chat_notification',
@@ -66,7 +74,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'user_name': user_name, }
             )
 
-        if type == 'create_poll':
+        elif type == 'create_poll':
             # Code pour créer un sondage et l'envoyer à la chatroom
             await self.send(text_data=json.dumps({
                 'type': 'poll_created',
@@ -80,12 +88,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # Données mises à jour du sondage
             }))
 
+        elif type == 'update':
+            print('is update')
+            await self.channel_layer.group_send(
+                self.group_event_id, {
+                    'type': 'writting_active',
+                    'message': message,
+                    'user_name': user_name,
+                }
+            )
+
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
             'type': event['type'],
             'message': event['message'],
             'user_name': event['user_name'],
             'created_at': event['created_at']
+        }))
+
+    async def chat_image(self, event):
+        await self.send(text_data=json.dumps({
+            'type': event['type'],
+            'image': event['image'],
+            'user_name': event['user_name'],
         }))
 
     async def chat_notification(self, event):
@@ -101,7 +126,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': event['type'],
             'question': event['question'],
-            'options': event['options'],
+            'options': event['options'],  # LIST
             # Autres données du sondage
         }))
 
@@ -112,6 +137,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'sondage_id': event['sondage_id'],
             'results': event['results'],
             # Autres données mises à jour du sondage
+        }))
+
+    async def writting_active(self, event):
+        await self.send(text_data=json.dumps({
+            'type': event['type'],
+            'message': event['message'],
+            'user_name': event['user_name'],
+
         }))
 
     @sync_to_async

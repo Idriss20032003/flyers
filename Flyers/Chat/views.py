@@ -32,7 +32,7 @@ def initials(value):
 @require_POST
 def create_room(request, eId):
     event = Event.objects.get(id=eId)
-    name = f"groupe de : {event.title}"
+    name = f"{event.title}"
     # url = request.POST.get('url', '') IMPORTANT ????
     Room.objects.create(name=name, event=event, eId=eId)
     return JsonResponse({'message': f"un groupe a été créé pour l'évènement {event.title}"})
@@ -66,9 +66,13 @@ def Room_chat(request, eId):
         return timesince(a)
     event = Event.objects.get(id=eId)
     room = Room.objects.get(eId=eId)
+    eIds = Event.objects.filter(
+        members=request.user).values_list('id', flat=True)
+    rooms = Room.objects.filter(eId__in=eIds)
     user = request.user
     return render(request, 'Chat/Room_chat.html', {
         'room': room,
+        'rooms': rooms,
         'user': user,
         'event': event,
         'eId': eId,
@@ -89,3 +93,7 @@ def member_profile(request, id):
 def Roadmap(request, eId):
     event = Event.objects.get(id=eId)
     return render(request, 'Chat/Roadmap.html', {'event': event, 'eId': eId})
+
+def room_details(request, eId):
+    room = Room.objects.get(id=eId)
+    return render(request, 'Chat/room_details.html', {'room': room})

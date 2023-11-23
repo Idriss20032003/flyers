@@ -59,10 +59,19 @@ function sendMessage(){
 
 let Chat_onwritting =document.getElementById('Chat_onwritting');
 
+const scrollPart = document.getElementById('scrollPart');
 let chatLogElement = document.getElementById('chatLogElement');
 function scrollToBottom() {
-    chatLogElement.scrollTop = chatLogElement.scrollHeight
+    scrollPart.scrollTop = scrollPart.scrollHeight;
 }
+
+window.onload = function() {
+    setTimeout(function() {
+        console.log('scrolling');
+        scrollPart.scrollTop = scrollPart.scrollHeight;
+    }, 500); // Ajustez le délai au besoin
+};
+
 
 function displayImage(imageData) {
     const imageElement = document.createElement('img');
@@ -71,23 +80,25 @@ function displayImage(imageData) {
 
 function onChatMessage(data, user_id = null) {
     console.log('onChatMessage', data)
-
+    console.log(user_id);
     if (data.type == 'chat_message') {
         if (document.getElementById('is_tiping')) {
-            document.getElementById('is_tiping').remove()
+            document.getElementById('is_tiping').remove();
         }
-        if (user_id == data.user_name) {
-            chatLogElement.innerHTML += `<div class="message"> 
-                                        <p class="content_message">${data.message}</p> 
-                                        <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
+        if (user_id == data.user_id) { //data.user_name
+            chatLogElement.innerHTML += `<div class="message_own"> 
+                                        <p class="message_body">${data.message}</p> 
+                                        <p class ="date_message">${data.user_name}, <br>Il y a ${data.created_at} </p>
                                         </div>` //ajouter le style adéquat!
         }
         else {
-            chatLogElement.innerHTML += `<div class="message"> 
-            <p class="content_message">${data.message}</p> 
-            <i><p class ="message_infos">${data.created_at}-${data.user_name}</p></i>
+            chatLogElement.innerHTML += `<div class="message_other"> 
+            <p class="message_body">${data.message}</p> 
+            <p class ="date_message">Il y a ${data.created_at}, ${data.user_name}</p>
             </div>` //ajouter le style adéquat!
         }
+        scrollPart.scrollTop = scrollPart.scrollHeight;
+
     }
     else if (data.type == 'writting_active') {
         if(! user_id==data.user_name){

@@ -1,73 +1,98 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Salons de discussion</title>
-    <link rel="stylesheet" href="../static/Chat/css/Room_chat.css">
-</head>
+{% extends 'Chat/base.html' %}
+{% load static %}
+{% block head %}<link href="{% static 'Chat/css/home.css' %}" rel="stylesheet" />{% endblock %}
 
-<body>
-<h2> {{room.name}}</h2>
+{% block content %}
+    <div class="container-conv" id="scrollPart">
+        <div class="zone_body">
+            <h2> {{room.name}}</h2>
+            <a href="{% url 'room_detail' room.eId %}">Voir les membres</a>
+        </div>
+    
+        <div id="chatLogElement">
+            {% for message in room.messages.all %}
+                {% if user.username == message.sent_by %}
+                    <div class="message_own"> 
+                        <p class="message_body">{{message.body}}</p> 
+                        <p class ="date_message">{{message.sent_by}}, <br>{{message.created_at}}</p>
 
-<div class="zone_body">
-
-<div class="infos/gestion">
-    <b>Membres </b>
-    {% for  member in event.members.all %}
-       <a href="{% url 'member_profile' member.id %}"><div class="member"> 
-        {{member.username}}
-    {% endfor %}
-    <a href="{% url 'Roadmap' room.eId %}"><button>Roadmap</button></a>
-</div></a>
-</div>
-
-<div id="chatLogElement">
-
-{% for message in room.messages.all %}
-        {% if user.username == message.sent_by %}
-            <div class="message_self"> 
-
-
-                <p class="content_message">{{message.body}}</p>
-                <i><p class ="message_info">{{message.sent_by}}-{{message.created_at}}</p></i>
+                    </div>
+                {% else %}
+                <div class="message_other"> 
+                    <p class="message_body">{{message.body}}</p> 
+                    <p class ="date_message">{{message.sent_by}}, <br>{{message.created_at}}</p>
 
                 </div>
-        {% else %}
-            <div class="message_other"> 
+                {% endif %}
+            {% endfor %}
+        </div>
+    
+        <div id="Chat_onwritting"></div>
+    
+        <div class="chat_input_container" id="chatzone" data-eId="{{ eId }}">
+            <form id="fileForm">
+                <label for="fileInput">
+                    <i class="fas fa-paperclip" style="font-size: 24px; cursor:pointer;"></i>
+                </label>
+                <input id="fileInput" type="file" accept="image/*">
+                <!--<button type="button" id="fileSend"><i class="fas fa-paper-plane"></i></button>-->
+            </form>
+            <input id="chatInputElement" placeholder="Taper un message">
+            <button id="EnvoiMess"><i class="fas fa-paper-plane" style="font-size: 24px;"></i></button>
+            
+        </div>
+    </div>
+    
+{% endblock %}
 
-                <p class="content_message">{{message.body}}</p>
-                <i><p class ="message_info">{{message.sent_by}}-{{message.created_at}}</p></i>
-
-                </div>
-        {% endif %}
-{% endfor %}
-</div>
-<div id="Chat_onwritting"></div>
-</div>
-<div id="chatzone" data-eId="{{ eId }}">
-    <input id="chatInputElement" value="">
-    <button id="EnvoiMess">Envoyer</button>
-
-    <form id="fileForm">
-        <label for="fileInput"> Médias </label>
-    <input id='fileInput' type='file' accept="image/*">
-<button type="button" id="fileSend">Send</button></form>
-
-</div>
-</body>
-<style>
-
-</style>
+{% block script %}
+<script src="../../static/Flow/js/flow.js"></script>
 <script>
+    const scrollTruc = document.getElementById('scrollPart');
     chatLogElement=document.getElementById('chatLogElement');
-
     const u = chatzone.getAttribute('data-eId');
     console.log(u);
     chatSocket = new WebSocket(`ws://${window.location.host}/ws/${u}/`)
-    function scrollChatToBottom() {
+    
+    function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+    if (interval > 1) {
+        return Math.floor(interval) + " ans";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+        return Math.floor(interval) + " mois";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+        return Math.floor(interval) + " jours";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+        return Math.floor(interval) + " heures";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+        return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " secondes";
+}
+let messages = document.querySelectorAll('.date');
+const H = new Date(0, 0, 0, 1, 0, 0)
+messages.forEach(function(message){
+        let dateString = message.getAttribute('attr');
+        let date = new Date(dateString);
+    let since = timeSince(date);
+    message.textContent = `${since}`;
+});
+
+function scrollChatToBottom() {
     chatLogElement.scrollTop = chatLogElement.scrollHeight;
 }
 window.onload = function() {
+    scrollTruc.scrollTop = scrollTruc.scrollHeight;
     scrollChatToBottom(); // Appeler la fonction pour faire défiler vers le bas au chargement
 };
 
@@ -89,7 +114,7 @@ chatSocket.onclose = function(e) {
 };
 
 </script>
+{% endblock %} 
 
-<script src="../../static/Flow/js/flow.js"></script>
 
 

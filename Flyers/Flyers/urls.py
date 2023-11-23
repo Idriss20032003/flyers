@@ -34,6 +34,7 @@ urlpatterns = [
     path('checkout/<int:event_id>/', Authentication.views.checkout, name='buy_ticket'),
     path('modify_event/<int:eId>/', Flow.views.modify_event, name='modify_event'),
     path('leave-event/<int:eId>/', Flow.views.leave_event, name='leave_event'),
+    path('room-detail/<int:eId>/', Chat.views.room_details, name='room_detail'),
 ]
 
 if settings.DEBUG:

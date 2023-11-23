@@ -124,6 +124,7 @@
     transition: all .3s ease 0s;
     width: fit-content;
 }
+
 .join-link button{
     padding: 20px;
     outline: none;

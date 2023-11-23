@@ -1,5 +1,4 @@
-const section_events = document.querySelectorAll(".event-card");
-console.log("eee")
+//const section_events = document.querySelectorAll(".event-card");
 
 //let actuals = JSON.parse('{{ list_events }}')
 //let list_events = document.getElementById("list_events")
@@ -25,7 +24,8 @@ function getCookie(name) {
 
 function printEvent(ev_model) {
     const ev = ev_model["fields"]
-    const divLikes = document.getElementById(ev.id)
+    const elemLikes = document.getElementById(ev_model["pk"])
+    //divLikes.attr="{{ev_model.pk}}"
     /*const elem = document.createElement("article")
     const elemTitle = document.createElement("h3")
     const elemDesc = document.createElement("p")
@@ -34,7 +34,8 @@ function printEvent(ev_model) {
     const elemDateCreation = document.createElement("p")
     const elemImg = document.createElement("img")
     const elemRoadmap = document.createElement("div")*/
-    const elemLikes = document.createElement("button")
+    //const elemLikes = document.createElement("button")
+    //elemLikes.attr="{{ev_model.pk}}"
 
     /*elemTitle.innerText = ev["title"]
     elemDesc.innerText = "description : "+ev["description"]
@@ -53,7 +54,7 @@ function printEvent(ev_model) {
     //divLikes.className = "event-card-likes"
     //elemLikes.class = "btn-likes"
     elemLikes.addEventListener("click", function(e) {
-        const elementId = ev_model.pk; // id de l'élément qu'on souhaite mettre à jour
+        const elementId = ev_model["pk"]; // id de l'élément qu'on souhaite mettre à jour
         console.log(elementId)
         e.preventDefault()
         fetch('/update-like/', {
@@ -88,15 +89,14 @@ function printEvent(ev_model) {
     console.log(divImg)
     elem.appendChild(divImg)
     elem.appendChild(elemRoadmap)*/
-    divLikes.appendChild(elemLikes)
+    //divLikes.appendChild(elemLikes)
     //elem.appendChild(divLikes)
 
    //return elem
 }
 
-for (let i = 0; i < events.length; i++) {
-    const ev_model = events[i] // on récupère le prochain événement de la DB
-    console.log("eee")
+for (let i = 0; i < serialized_events.length; i++) {
+    const ev_model = serialized_events[i] // on récupère le prochain événement de la DB
     printEvent(ev_model)
     /*const espace = document.createElement("br")
     section_events.appendChild(espace)*/

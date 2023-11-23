@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.core.serializers import serialize
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -15,8 +16,10 @@ from django.views.decorators.http import require_POST, require_GET
 
 def home(request):
     events = Event.objects.all().order_by('-created_at')
+    serialized_events = serialize('json', events)
     form = SearchForm(request.GET)
-    return render(request,'Flow/home.html', {'events': events, 'form': form})
+    print(serialized_events)
+    return render(request,'Flow/home.html', {'events': events, 'form': form, 'serialized_events': serialized_events})
 
 def show_results(request):
     if request.method == 'POST':
@@ -57,7 +60,7 @@ def update_like(request):
     # Récupérez l'ID de l'élément à mettre à jour depuis la requête POST
     element_id = request.POST.get('element_id')
     user = request.user
-
+    
     # Vérifiez si l'utilisateur a déjà aimé le contenu
     if not Like.objects.filter(user=user, event_id=element_id).exists():
         # Ajoutez le "like" à la base de données
@@ -70,6 +73,7 @@ def update_like(request):
         votre_objet = Event.objects.get(id=element_id)
         votre_objet.Likes += 1
         votre_objet.save()
+        #print("likes :" + votre_objet.Likes)
 
         # Réponse JSON indiquant le succès de la mise à jour
         return JsonResponse({'success': True, 'new_likes': votre_objet.Likes})

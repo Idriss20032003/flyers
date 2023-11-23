@@ -1,6 +1,10 @@
 {% extends 'Flow/base.html' %}
 {% load static %}
-{% block head %}<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />{% endblock %}
+{% block head %}<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
+        <script>var serialized_events = JSON.parse('{{ serialized_events|escapejs}}');</script>
+        <!--<script>var events = JSON.parse('{{ events|escapejs}}');</script>-->
+        <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
+{% endblock %}
 
 {% block content %}
     <div class="global-container">
@@ -39,8 +43,10 @@
                             <p><i class="fas fa-tag icon"></i>Gratuit!</p>
                         {% endif %}
                         <a class="join-link"  href = "{% url 'event' event.id %}"><button attr="{{event.id}}">Détails</button></a>
+                        <p> </p>
+                        <a class="join-link" href=""><button class="event-card-likes" id="{{event.id}}" attr="{{event.id}}">Likes</button></a>
+                        <!--<div class="event-card-likes" id="{{event.id}}" attr="{{event.id}}"></div>-->
                     </div>
-                    <div class="event-card-likes" id="{{event.id}}"></div>
                     <img src="{{event.image.url}}" alt="Photo de l'event">
                 </div>
             {% endfor %}  
@@ -51,5 +57,4 @@
 
 {% block script %}
 <script src="../../static/Flow/js/flow.js"></script>
-<script src="../../static/Flow/js/display_events.js"></script>
 {% endblock %} 

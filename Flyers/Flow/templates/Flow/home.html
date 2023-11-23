@@ -33,10 +33,9 @@
                     <div class="infos-event">
                         <h2>{{event.title}}</h2>
                         <p> {{event.description}}</p>
-                        <p><i class="fas fa-user icon"></i>{{ event.created_by }}</p>
+                        <p><a href="{% url 'member_profile' event.created_by.id %}"><i class="fas fa-user icon"></i>{{ event.created_by }}</a></p>
                         <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
                         <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
-
                         {% if event.is_paid_event %}
                             <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
                         {% else %}

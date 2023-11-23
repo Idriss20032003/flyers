@@ -163,7 +163,8 @@ def JoinEventConfirm(request, eId):
 def show_event(request, eId):
     event = Event.objects.get(id=eId)
     user_is_member = request.user in event.members.all()
-    return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member})
+    actual_nb_members = event.members.all().count() + 1
+    return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member, 'actual_nb_members_plus_one': actual_nb_members})
 
 def Roadmap_seeOnly(request, eId):
     event = Event.objects.get(id=eId)

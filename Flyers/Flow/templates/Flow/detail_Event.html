@@ -12,6 +12,7 @@
                 <p> {{event.description}}</p>
                 <p><i class="fas fa-user icon"></i>{{event.created_by}}</p>
                 <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
+                <p><i class="fas fa-map-marker-alt icon"></i>{{event.place}}</p>
                 <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
                 {% if user.is_authenticated and user == event.created_by %}
                     <form action="{% url 'modify_event' event.id %}" method="post">
@@ -20,13 +21,20 @@
                     </form>
                 {% else %}
                     {% if not user_is_member %}
-                        {% if event.is_paid_event %}
-                            <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
-                            <!--<a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>-->
-                            <a class="join-link"  href = "{% url 'buy_ticket' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>
+                        {% if event.max_members > event.members.all.count %}
+                            {% if event.max_members == actual_nb_members_plus_one %}
+                                <p>Faites vite ! Il ne reste qu'une seule place !</p>
+                            {% endif %}
+                            {% if event.is_paid_event %}
+                                <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
+                                <!--<a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>-->
+                                <a class="join-link"  href = "{% url 'buy_ticket' event.id %}"><button attr="{{event.id}}">Acheter mon ticket</button></a>
+                            {% else %}
+                                <p><i class="fas fa-tag icon"></i>Gratuit!</p>
+                                <a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Rejoindre</button></a>
+                            {% endif %}
                         {% else %}
-                            <p><i class="fas fa-tag icon"></i>Gratuit!</p>
-                            <a class="join-link"  href = "{% url 'JoinEventConfirm' event.id %}"><button attr="{{event.id}}">Rejoindre</button></a>
+                            <p>L'event est complet !</p>
                         {% endif %}
                     {% else %}
                         <p>Vous participez à cet event !</p>

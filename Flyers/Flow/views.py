@@ -36,7 +36,8 @@ def show_results(request):
             # Filtre par tags
             if search_query.get('tags'):
                 tags_list = ['#' + tag.strip() for tag in search_query['tags'].split('#') if tag.strip()]
-                results = results.filter(tags__tag__in=tags_list)
+                for tag in tags_list:
+                    results = results.filter(tag__tag__contains=tag)
 
             # Filtre par type d'événement
             if search_query.get('event_type'):
@@ -92,14 +93,14 @@ def createEvent(request):
             event.save()
 
             # Enregistrer les tags associés à l'événement
-            tags_data = tag_form.cleaned_data.get('tags', '')
+            tags_data = tag_form.cleaned_data.get('tag', '')
             tags_list = ['#' + tag.strip()
                          for tag in tags_data.split('#') if tag.strip()]
 
             for tag_text in tags_list:
-                tag, created = Tags.objects.get_or_create(tags=tag_text)
+                tag, created = Tags.objects.get_or_create(tag=tag_text)
                 tag.save()
-                event.tags.add(tag)
+                event.tag.add(tag)
 
             event.members.add(request.user)
 
@@ -160,3 +161,7 @@ def show_event(request, eId):
     event = Event.objects.get(id=eId)
     user_is_member = request.user in event.members.all()
     return render(request, 'Flow/detail_event.html', {'event': event, 'user_is_member': user_is_member})
+
+def Roadmap_seeOnly(request, eId):
+    event = Event.objects.get(id=eId)
+    return render(request, 'Flow/roadmap_seeOnly.html', {'event': event})

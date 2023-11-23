@@ -199,9 +199,9 @@ EventCreated.addEventListener('submit', function (event) {
         if (data) {
             console.log('data', data);
             // Le reste de ton code pour la création du socket, etc.
-            alert(`L'évènement a été créé, retrouvez ses membres dans vos communautés !`)
+            alert(`L'évènement a été créé, retrouvez ses membres dans vos communautés !`);
 
-            chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`)
+            chatSocket = new WebSocket(`ws://${window.location.host}/ws/${eId}/`);
 
             chatSocket.onmessage = function(e) {
                 console.log('onMessage');
@@ -216,7 +216,7 @@ EventCreated.addEventListener('submit', function (event) {
 
             chatSocket.onopen = function(e) {
                 console.log('onOpen - chat socket was opened');
-    window.location.href = '/'; // Redirection vers la page d'accueil
+                window.location.href = '/'; // Redirection vers la page d'accueil
 
             };
 

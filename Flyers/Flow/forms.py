@@ -13,6 +13,11 @@ class TagForm(forms.ModelForm):
         model = Tags
         fields = ['tag']
 
+class EventModifyForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title', 'description', 'date', 'image', 'max_members']
+
 
 EVENT_TYPES = (
 	('', '-----'),

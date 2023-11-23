@@ -12,7 +12,10 @@
     margin-right: 40px;
 }
 
-
+a{
+    text-decoration: none;
+    color: black;
+}
 .link-profile{
     margin-bottom: 30px;
     text-decoration: none;

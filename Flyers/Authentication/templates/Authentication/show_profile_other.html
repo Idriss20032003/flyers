@@ -6,36 +6,9 @@
 
 {% block content %}
     <div class="global-container">
-        <h1 class="">Bonjour {{ user.name }},</h1>
+        <h1 class="">Profil de {{ user.name }},</h1>
         <div class="profile-container">
-            <div class="left-section">
-                <h2>Vos informations</h2>
-                <p class="texte">Pseudo : {{ user.name }}</p>
-                <p class="texte">Email : {{ user.email }}</p>
-                {%if not user.is_validated_money_man and not user.money_man_request_pending%}
-                    <form action="{% url 'demande_validation'%}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="link-profile">Demander à pouvoir recevoir des paiements</button>
-                    </form>
-                {%endif%}
-                {%if user.money_man_request_pending%}
-                    <p class="texte">Vous êtes en attente de validation pour recevoir des paiements</p>
-                {%endif%}
-                {%if user.is_validated_money_man and not user.money_man_request_pending%}
-                    <p class="texte">Vous pouvez recevoir des paiements</p>
-                {%endif%}
-                {% if user.is_validated_money_man %}
-                    <form action="{% url 'create_stripe_connect_account' %}" method="post">
-                        {% csrf_token %}
-                        <button class="link-profile" type="submit">Créer un compte Connect</button>
-                    </form>
-                {% endif %}
-                <form action="{% url 'modify_profile'%}" method="get">
-                    {% csrf_token %}
-                    <button type="submit" class="link-profile">Editer mon profil</button>
-                </form>
-                <a class="link-profile" href="{% url 'logout' %}">Se déconnecter</a>
-            </div>
+            
             <div class="right-section">
                 {% if user.avatar %}
                     <img class="profile-picture" src="{{ user.avatar.url }}" alt="Profile Picture">
@@ -45,7 +18,7 @@
             </div>
         </div>
         <div class="events-container">
-            <h2>Les événements que vous avez créé</h2>
+            <h2>Les événements créés par {{ user.name }}</h2>
             {% for event in events_created %}
                 <div class="event-card">
                     <div class="infos-event">
@@ -66,7 +39,7 @@
             {% endfor %}  
         </div>
         <div class="events-container">
-            <h2>Les événements auxquels vous participez</h2>
+            <h2>Les événements auxquels {{user.name}} participe</h2>
             {% for event in events %}
                 <div class="event-card">
                     <div class="infos-event">
@@ -75,6 +48,7 @@
                         <p><a href="{% url 'member_profile' event.created_by.id %}"><i class="fas fa-user icon"></i>{{ event.created_by }}</a></p>
                         <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
                         <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
+
                         {% if event.is_paid_event %}
                             <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
                         {% else %}

@@ -83,7 +83,7 @@ def update_like(request):
 def createEvent(request):
     if request.method == 'POST':
         # vérifier si on reçoit sous le bon format les données du formulaire html qui a été envoyé par l'api de JS
-        event_form = EventForm(request.POST)
+        event_form = EventForm(request.POST, request.FILES)
         tag_form = TagForm(request.POST)
 
         if event_form.is_valid() and tag_form.is_valid():
@@ -165,3 +165,26 @@ def show_event(request, eId):
 def Roadmap_seeOnly(request, eId):
     event = Event.objects.get(id=eId)
     return render(request, 'Flow/roadmap_seeOnly.html', {'event': event})
+
+def modify_event(request, eId):
+    if request.user.is_authenticated:
+        event = Event.objects.get(id=eId)
+        if request.method == 'POST':
+            form = EventModifyForm(request.POST, request.FILES, instance=event)
+            print(form)
+            if form.is_valid():
+                form.save()
+                return redirect('profile')
+        else:
+            form = EventModifyForm(instance=event)
+        return render(request, 'Flow/modify_event.html', {'form': form, 'event': event})
+    else:
+        return redirect('login')
+    
+def leave_event(request, eId):
+    if request.user.is_authenticated:
+        event = Event.objects.get(id=eId)
+        event.members.remove(request.user)
+        return redirect('event', eId)
+    else:
+        return redirect('login')

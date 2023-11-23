@@ -26,10 +26,22 @@ EVENT_TYPES = (
     )
 
 class SearchForm(forms.Form):
-    
-    title = forms.CharField(required = False)
-    date = forms.DateField(required = False)
-    event_type = forms.ChoiceField(widget = forms.Select, choices = EVENT_TYPES)
-    tags = forms.CharField(required = False)
+    title = forms.CharField(
+        required = False,
+        widget=forms.TextInput(attrs={'placeholder': 'Titre de l\'événement'})
+    )
+    date = forms.DateField(
+        required = False,
+        widget=forms.DateInput(attrs={'placeholder': 'Date (JJ/MM/AAAA)'})
+    )
+    tags = forms.CharField(
+        required = False,
+        widget=forms.TextInput(attrs={'placeholder': 'Tags'})
+    )
+    event_type = forms.ChoiceField(
+        required=False, 
+        widget = forms.Select, 
+        choices = EVENT_TYPES
+    )
 
     

@@ -1,148 +1,53 @@
-
+{% extends 'Flow/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Flux</title>
-        <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
-        <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
-        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
-    </head>
-<body>
-    <div>
-        <p> Page d'accueil</p>
-        {% if user.is_authenticated %}
-        <p> <a href="{% url 'GroupPage' %}" id="OuvertureGroupes">Communautés</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}" id="connectionUser">Se connecter</a>
-      {% endif %}
-    
-    </div>
-    
-    <div>
-        {% if user.is_authenticated %}
-        <p><a href="{% url 'create_event' %}" id="fly">Fly ton event</a>
- </p>
- {% else %}
- <a href="{% url 'login' %}">Fly ton event</a>
-      {% endif %}
+{% block head %}<link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />{% endblock %}
 
-        <div>
-            {% for event in events %}
-        <br> 
-        <div> title : {{event.title}}</div>
-        <div>description : {{event.description}}</div>
-        <div>created by : {{event.created_by}}</div>
-        <div>created at : {{event.created_at}}</div>
-        
-        <a href = "{% url 'joinEvent' event.id %}"><button class="Join" attr="{{event.id}}">join </button></a>
-        
-        <button class="B">Fund </button>
-
-        <br>
-        {% endfor %}
-    </div>
-    {% if user.is_authenticated %}
-      <p> Vous êtes connectés. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-    {% endif %}
-
-    <div class="accueil">
-        <div class="connexion">
-            {% if user.is_authenticated %}
-            <p> <a href="{% url 'GroupPage' %}">Communautés</a> </p>
-            {% else %}
-            <a href="{% url 'login' %}">Communautés</a>
-            {% endif %}
-
-            <div>
-                {% if user.is_authenticated %}
-                <div class="fly_ton_event">
-                <p><a href="{% url 'create_event' %}">Fly ton event</a></p>
-                </div>
-                {% else %}
-                <div class="fly_ton_event">
-                <p><a href="{% url 'login' %}">Fly ton event</a></p>
-                </div>
-                {% endif %}
-            </div>
-
-            {% if user.is_authenticated %}
-            <p> Vous êtes connecté. <a href= "{% url 'logout' %}">Se déconnecter</a>  </p>
-            {% endif %}
-        </div>
-        
-        <div class="flux">
-
-            <section class="events_flow">
-            </section>
+{% block content %}
+    <div class="global-container">
+        <h1>Accueil</h1>
             
-        </div>
+        <h2>Les derniers events</h2>
 
-        <div class="recherche">
-            <h2>Recherche</h2>
-            <div class="search_form">
-                {% if results %}
-                    <h2>Search Results</h2>
-                    <ul>
-                        {% for event in results %}
-                            <li>{{ event.title }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <form action="" method="get" novalidate>
-                        {{ form.as_p }}
-                        <input type="submit" value="Envoyer">
-                    </form>
-                {% endif %}
-            </div>
+        <div class="search_form">
+            
+            <form action="{% url 'search' %}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <span class="field">{{ field }}</span>
+                {% endfor %}
+                <button class="button-search" id="button-search" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        {% if request.user.is_authenticated and eId %}
+        <div class="success-box">
+            <span>Vous avez bien rejoint l'event !</span>
+        </div>
+         {% endif %}   
+        <div class="events-container">
+            {% for event in events %}
+                <div class="event-card">
+                    <div class="infos-event">
+                        <h2>{{event.title}}</h2>
+                        <p> {{event.description}}</p>
+                        <p><i class="fas fa-user icon"></i>{{ event.created_by }}</p>
+                        <p><i class="fas fa-calendar-alt icon"></i>{{event.date}}</p>
+                        <p><i class="fas fa-users icon"></i>{{event.members.all.count}} / {{event.max_members}}</p>
+
+                        {% if event.is_paid_event %}
+                            <p><i class="fas fa-tag icon"></i>{{event.ticket_price}} €</p>
+                        {% else %}
+                            <p><i class="fas fa-tag icon"></i>Gratuit!</p>
+                        {% endif %}
+                        <a class="join-link"  href = "{% url 'event' event.id %}"><button attr="{{event.id}}">Détails</button></a>
+                    </div>
+                    <img src="{{event.image.url}}" alt="Photo de l'event">
+                </div>
+            {% endfor %}  
         </div>
     </div>
+{% endblock %}
 
-    <script src="../../static/Flow/js/flow.js"></script>
 
-</body>
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-        function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Recherche du jeton CSRF dans les cookies
-            if (cookie.startsWith(`${name}=`)) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    };
-    return cookieValue;
-};
-
-        const boutonsJoin = document.querySelectorAll('.Join');
-        
-        boutonsJoin.forEach(button => {
-            button.addEventListener('click', (e) => {
-                let id = button.getAttribute("attr");
-                console.log(id);
-
-                fetch(`/joinEvent/${id}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-                .then(response => {
-                    // Gérer la réponse si nécessaire
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la requête :', error);
-                });
-            });
-        });
-    });
-</script>
-</html>
-
- -->
+{% block script %}
+<script src="../../static/Flow/js/flow.js"></script>
+{% endblock %}

@@ -27,8 +27,8 @@ def register(request):
 class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'Authentication/login.html'
-
-
+    def get_success_url(self):
+        return reverse('profile')  # Obtient l'URL à partir du nom de la route
 
 def show_profile(request):
     if request.user.is_authenticated:
@@ -98,22 +98,22 @@ def create_stripe_connect_account(request):
         messages.error(request, "Une erreur est survenue lors de la création du compte Stripe.")
         return redirect('profile')
     
-def checkout(request, cart_id):
-    cart = TinyCart.objects.get(id=cart_id)
+def checkout(request, event_id):
+    event = Event.objects.get(id=event_id)
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
             'price_data': {
                 'currency': 'eur',
                 'product_data': {
-                    'name': 'Panier de produits frais et locaux',
+                    'name': 'Ticket pour l\'event : ' + event.title,
                 },
-                'unit_amount': int(cart.total_price * 100),
+                'unit_amount': int(event.ticket_price * 100),
             },
             'quantity': 1,
         }],
         mode='payment',
-        success_url=request.build_absolute_uri(reverse('payment_success')),
+        success_url=request.build_absolute_uri(reverse('JoinEventConfirm', args=(event_id,))),
         cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
     )
 

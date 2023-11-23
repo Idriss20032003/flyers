@@ -1,32 +1,39 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Flux</title>
-        <link href="{% static 'Flow/css/home.css' %}" rel="stylesheet" />
+        <title>Flyers</title>
+        {% block head %}{% endblock %}
+        <link href="{% static 'Flow/css/base.css' %}" rel="stylesheet" />
         <script type="module" src="{% static 'Flow/js/display_events.js' %}"></script>
-        <script>var list_events = JSON.parse('{{ list_events|escapejs}}')</script>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{% static 'Flow/assets/img/logo.png' %}">
+
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
 <body>
-
-{% block content %}{% endblock %}
-
-<div class="recherche">
-    {% if results %}
-        <h2>Search Results</h2>
-        <ul>
-        {% for event in results %}
-            <li>{{ event.title }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <form action="" method="post" novalidate>
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Envoyer">
-        </form>
-    {% endif %}
-</div>
+    <nav>
+        <div class="navbar">
+            <div class="left-navbar">
+                <a class="logo" href="{% url 'home' %}"><img src="{% static 'Flow/assets/img/logo.png' %}" alt="Logo"></a>
+            </div>
+            <div class="right-navbar">
+                {% if request.user.is_authenticated %}
+                    <a class="link-nav" href="{% url 'create_event' %}">Fly ton event</a>
+                    <a class="link-nav" href="{% url 'GroupPage' %}">Communautés</a>
+                    <a class="link-nav" href="{% url 'profile' %}">Profil</a>
+                {% else %}
+                    <a class="link-nav" href="{% url 'login' %}">Se connecter</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        Copyright 2023 Flyers
+    </footer>
+    {% block script %}{% endblock %}
 </body>
 </html>

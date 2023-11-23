@@ -102,48 +102,8 @@
 
     <script src="../../static/Flow/js/flow.js"></script>
 
+  
+
 </body>
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-        function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Recherche du jeton CSRF dans les cookies
-            if (cookie.startsWith(`${name}=`)) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    };
-    return cookieValue;
-};
-
-        const boutonsJoin = document.querySelectorAll('.Join');
-        
-        boutonsJoin.forEach(button => {
-            button.addEventListener('click', (e) => {
-                let id = button.getAttribute("attr");
-                console.log(id);
-
-                fetch(`/joinEvent/${id}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-                .then(response => {
-                    // Gérer la réponse si nécessaire
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la requête :', error);
-                });
-            });
-        });
-    });
-</script>
 </html>
 
- -->

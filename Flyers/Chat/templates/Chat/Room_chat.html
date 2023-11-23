@@ -42,11 +42,17 @@
         {% endif %}
 {% endfor %}
 </div>
-
+<div id="Chat_onwritting"></div>
 </div>
 <div id="chatzone" data-eId="{{ eId }}">
     <input id="chatInputElement" value="">
     <button id="EnvoiMess">Envoyer</button>
+
+    <form id="fileForm">
+        <label for="fileInput"> Médias </label>
+    <input id='fileInput' type='file' accept="image/*">
+<button type="button" id="fileSend">Send</button></form>
+
 </div>
 </body>
 <style>

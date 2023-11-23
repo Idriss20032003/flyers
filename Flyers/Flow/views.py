@@ -159,11 +159,7 @@ def JoinEventConfirm(request, eId):
     user = request.user
     event = Event.objects.get(id=eId)
     event.members.add(user)
-    return render(request, 'Flow/home.html', {
-        "eId": eId,
-        "user": user,
-        'event': event
-    })
+    return redirect('/')
 
 
 def Roadmap_seeOnly(request, eId):

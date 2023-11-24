@@ -8,14 +8,14 @@ Le projet se nomme Flyers. Flyers est un réseau social qui permet de créer et 
 
 Avant d'utiliser le site, il faut entrer quelques lignes de code dans le terminal:
 
-cd <chemin_vers_projet>/cw02
-python -m venv env
-source env/Scripts/activate
-cd Flyers/
-pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+- cd <chemin_vers_projet>/cw02
+- python -m venv env
+- source env/Scripts/activate
+- cd Flyers/
+- pip install -r requirements.txt
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py runserver
 
 A partir d'ici, les modules nécessaires ont été installés, la base de données a été créée et le serveur est ouvert en local.
 On peut maintenant accéder au site en entrant l'URL http://127.0.0.1:8000/ dans un navigateur de recherche.

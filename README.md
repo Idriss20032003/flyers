@@ -17,8 +17,8 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 
-A partir d'ici, les modules nécessaires ont été installés, la base de données a été créée et le serveur est ouvert en local
-On peut maintenant accéder au site en entrant l'URL http://127.0.0.1:8000/ dans un navigateur de recherche
+A partir d'ici, les modules nécessaires ont été installés, la base de données a été créée et le serveur est ouvert en local.
+On peut maintenant accéder au site en entrant l'URL http://127.0.0.1:8000/ dans un navigateur de recherche.
 
 ## Création superuser
 
@@ -26,7 +26,7 @@ Pour avoir accès à la partie admin du site, il faut entrer dans le terminal ba
 
 python manage.py createsuperuser
 
-Il faudra alors entrer le nom d'utilisateur et un mot de passe
+Il faudra alors entrer le nom d'utilisateur et un mot de passe.
 
 ## Description MVP
 
